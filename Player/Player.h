@@ -4,6 +4,7 @@
 #include "../Grid/Grid.h"
 #include "../Blocks/Block.h"
 #include "../Level/Level.h"
+#include "../XWindow/XWindow.h"
 
 class Player{
     int score;
@@ -11,7 +12,7 @@ class Player{
     Level *level;
     Block *nextBlock;
     Block *currBlock;
-    // xWindow *window;
+    Xwindow *window;
 
     public:
     virtual ~Player() = 0;
@@ -26,6 +27,7 @@ class Player{
     virtual void rotate(std::string direction) = 0;
     virtual int drop() = 0;
     virtual void print() = 0;
+    virtual void drawXWindowBoard() = 0;
     //virtual void addBlockOnBoard(Block *b) = 0;
 };
 

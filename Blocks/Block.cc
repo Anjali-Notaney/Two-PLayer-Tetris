@@ -1,7 +1,7 @@
 #include "Block.h"
 #include <algorithm>
 
-Block::Block(Grid* g, char c):grid(g),type(c){}
+Block::Block(Grid* g, char c):type(c), grid(g){}
 
 Block::~Block(){}
 
@@ -41,7 +41,7 @@ bool Block::moveLeft(){
   std::sort(blockCells.begin(), blockCells.end(), CompareX());
   char c = blockCells.at(0)->getType();
   //We go through the cells and change their pointers to new cells
-  for(int i = 0; i < blockCells.size(); i++){
+  for(int i = 0; i < (int)blockCells.size(); i++){
       blockCells.at(i)->isUsed = false;
       blockCells.at(i)->setType(' ');
       blockCells.at(i) = blockCells.at(i)->getNeighbour("left");
@@ -203,7 +203,7 @@ bool Block::rotate(std::string direction){
 
 //Remove reference to cell in the blockCells vector
 void Block::removeCellFromBlock(int x, int y){
-    for(int i = 0; i < blockCells.size(); i++){
+    for(int i = 0; i < (int)blockCells.size(); i++){
         if(blockCells.at(i)->getX() == x && blockCells.at(i)->getY() == y){
             blockCells.erase(blockCells.begin() + i);
         }
@@ -212,7 +212,7 @@ void Block::removeCellFromBlock(int x, int y){
 
 //Set each cell in the block to be its downwards neighbour
 void Block::moveCellsDown(int rowCleared){
-    for(int i = 0; i < blockCells.size(); i++){
+    for(int i = 0; i < (int)blockCells.size(); i++){
         if(blockCells.at(i)->getY() < rowCleared){
             blockCells.at(i) = blockCells.at(i)->getNeighbour("bottom");
         }

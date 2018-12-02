@@ -20,6 +20,7 @@ class Block {
     Grid *grid;
 
     public:
+    static std::map <char, std::string> colours;
     Block(Grid* g, char type);
     virtual ~Block() = 0;
     void setUpBlock();

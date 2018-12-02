@@ -13,14 +13,15 @@ class GamePlayer: public Player{
     char nextBlock;
     Block *currBlock = nullptr;
     std::vector<Block*> blocksOnBoard;
+    std::pair <std::pair<int, int>, std::pair<int, int>> displayBounds; // defines the space in the window where the display is drawn
     void shiftCellsDown(int y);
     void removeEmptyBlocks();
     void printBlock();
     public:
-    // xWindow *window;
+    Xwindow *window;
 
     //GamePlayer::GamePlayer(xWindow &w);
-    GamePlayer(Grid *grid, Level *level);
+    GamePlayer(Grid *grid, Level *level,  Xwindow* window);
     ~GamePlayer();
     std::vector<GridCell>* getRow(int rowNum) override;
     int getLevel() override;
@@ -32,7 +33,8 @@ class GamePlayer: public Player{
     void moveDown() override;
     void rotate(std::string direction) override;
     int drop() override;
-    void print() override; 
+    void print() override;
+    void drawXWindowBoard() override;
     //void addBlockOnBoard(Block *b) override;
 };
 #endif

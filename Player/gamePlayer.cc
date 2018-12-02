@@ -18,12 +18,13 @@
 
 
 //GamePlayer::GamePlayer(xWindow &w){}
-GamePlayer::GamePlayer(Grid* grid, Level *level):grid(grid), level(level){
+GamePlayer::GamePlayer(Grid* grid, Level *level, Xwindow* window):grid(grid), level(level), window(window){
   nextBlock = getNextBlock();
+  this->displayBounds.first = std::make_pair(0, 0); // top left corner
+  this->displayBounds.second = std::make_pair(250, 500); // bottom right corner
 }
 
 GamePlayer::~GamePlayer(){
-  delete grid;
   delete level;
   delete currBlock;
 }
@@ -88,6 +89,60 @@ void GamePlayer::rotate(std::string direction){
   currBlock->rotate(direction);
 }
 
+void GamePlayer::drawXWindowBoard(){
+  // Draw the level and the Score
+  this->window->drawString(displayBounds.first.first, displayBounds.first.second + 
+    (displayBounds.second.second - displayBounds.first.second)*0.05, (std::string)"Level: " + std::to_string(this->getLevel()));
+  this->window->drawString(displayBounds.first.first, displayBounds.first.second + 
+    (displayBounds.second.second - displayBounds.first.second)*0.1, (std::string)"Score: " + std::to_string(this->getScore()));
+
+  // Draw the grid
+  this->window->setFill("000000");
+  this->window->fillRectangle(displayBounds.first.first, displayBounds.first.second + 
+    (displayBounds.second.second - displayBounds.first.second)*0.15, displayBounds.second.first, displayBounds.second.second);
+
+  // Draw the blocks
+  for(int row = 0; row < this->grid->getHeight(); row++){
+    for(int col = 0; col < this->grid->getWidth(); col++){
+      GridCell* temp_cell = this->grid->getGridCell(col, row);
+      if(temp_cell->isUsed){
+        // int scaledHeight = (displayBounds.second.second - displayBounds.first.second)*0.15;
+        this->window->setFill(Block::colours[temp_cell->getType()]);
+        this->window->fillRectangle(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
+          (displayBounds.second.first - displayBounds.first.first)*(1.0/(float)this->grid->getWidth()),
+          (displayBounds.second.second - displayBounds.first.second)*(1.0/(float)this->grid->getHeight()));
+
+        // stroke the edge of the blocks with white
+        this->window->setFill("ffffff");
+        // top
+        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
+          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()));
+
+        // bottom
+        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()),
+          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()));
+
+        // left side
+        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
+          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col)/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()));
+
+        // right side
+        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
+          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
+          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()));
+      }
+    }
+  }
+}
+
 //Harsh
 
 //When a block is dropped, we go through all the rows of the grid.
@@ -131,7 +186,7 @@ void GamePlayer::shiftCellsDown(int rowCleared){
 
 //If the block is empty (i.e has no cells) delete it
 void GamePlayer::removeEmptyBlocks(){
-  for(int i = 0; i < blocksOnBoard.size(); i++){
+  for(int i = 0; i < (int)blocksOnBoard.size(); i++){
     if(blocksOnBoard.at(i)->numCells() == 0){
       blocksOnBoard.erase(blocksOnBoard.begin() + i);
       i--;
