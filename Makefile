@@ -1,8 +1,8 @@
 MAINFLAGS = $(mainflags)
 LEVELFLAGS = $(levelflags)
 
-out: main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o LevelDecorator.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o
-	g++ -g -Dstartlevel=1 -std=c++14 main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o LevelDecorator.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o -o out
+out: main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o
+	g++ -g -Dstartlevel=1 -std=c++14 main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o -o out
 
 main.o: main.cc
 	g++ -g ${MAINFLAGS} -std=c++14 -c main.cc
@@ -60,9 +60,6 @@ Level3.o: Level/Level3.cc Level/Level3.h
 
 Level4.o: Level/Level4.cc Level/Level4.h
 	g++ -g -std=c++14 -c Level/Level4.cc
-
-LevelDecorator.o: Player/LevelDecorator.h Player/LevelDecorator.cc
-	g++ -g -std=c++14 -c Player/LevelDecorator.cc
 
 BlindDecorator.o: Player/BlindDecorator.h Player/BlindDecorator.cc
 	g++ -g -std=c++14 -c Player/BlindDecorator.cc

@@ -3,7 +3,6 @@
 #include "Player/BlindDecorator.h"
 #include "Player/EffectsDecorator.h"
 #include "Player/ForceDecorator.h"
-#include "Player/LevelDecorator.h"
 #include "Player/HeavyDecorator.h"
 #include "Blocks/OBlock.h"
 #include "Blocks/JBlock.h"
@@ -26,6 +25,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <fstream>
+#include <cctype>
 
 void printPlayerBlocks(Player* p1, Player* p2){
 	char p1NextBlock = p1->getNextBlockChar();
@@ -152,7 +152,6 @@ void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore){
 		else std::cout << "╣" << std::endl;
     }
     std::cout << "╚═══════════╝\t\t╚═══════════╝" << std::endl;
-	//std::cout << std::endl;
 	std::cout << "╔═══════════╗\t\t╔═══════════╗" << std::endl;
     std::cout << "║ Next:     ║\t\t║ Next:     ║" << std::endl;
 	printPlayerBlocks(p1,p2);
@@ -217,13 +216,15 @@ std::vector<std::string> initVector(){
 }
 
 int getNumTimes(std::string &s){
-    std::stringstream ss{s.substr(0,1)};
     int numTimes;
-    if(ss>>numTimes){
-        s = s.substr(1);
-        return numTimes;
-    } else {
-        return 1;
+    for (int i = 0; i < s.length(); i++){
+        if (!isdigit(s[i])){
+            if (i == 0) return 1;
+            std::stringstream ss{s.substr(0,i+1)};
+            s = s.substr(i);
+            ss>>numTimes;
+            return numTimes;
+        }
     }
 }
 
@@ -233,7 +234,6 @@ std::string matchCommand(std::string input, std::vector<std::string> commands){
     std::string command;
     for(auto i : commands){
         if(std::regex_match(i,std::regex("^" + input + "(.*)"))){
-            //std::cout << i << std::endl;
             numMatches++;
             command = i;
         }
@@ -244,54 +244,76 @@ std::string matchCommand(std::string input, std::vector<std::string> commands){
     return "Please be more specific"; 
 }
 
+void changeTurn( Player* &activePlayer, Player* &p1, Player* &p2){
+    activePlayer->setNextBlock();
+    if(activePlayer->getPlayerId() == 1){
+		p1 = p1->getBasePlayer();
+        activePlayer = p2;
+    } else {
+		p2 = p2->getBasePlayer();
+        activePlayer = p1;
+    }
+}
+
 //Execute the command given
 void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &p2, std::vector<std::string> commands, int highScore, int times = 1){
     if(s == "left"){
         activePlayer->moveLeft(times);
+        if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
+            changeTurn(activePlayer, p1, p2);  
+        }
     } else if (s == "right"){
         activePlayer->moveRight(times);
+        if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
+            changeTurn(activePlayer, p1, p2);  
+        }
     } else if (s == "down"){
         activePlayer->moveDown(times);
+        if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
+            changeTurn(activePlayer, p1, p2);  
+        }
     } else if (s == "clockwise"){
         activePlayer->rotate("CW", times);
+        if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
+            changeTurn(activePlayer, p1, p2);  
+        }
     } else if (s == "counterclockwise"){
         activePlayer->rotate("CCW", times);
+        if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
+            changeTurn(activePlayer, p1, p2);  
+        }
     } else if (s == "drop"){
+
         //If they clear two or more lines, then take input for the other player
-		if(activePlayer->drop(times) >= 2){
-			while(true){
-				std::string decorator;
-				std::cin >> decorator;
-				if(decorator == "blind"){
-					if(activePlayer->getPlayerId() == 1) {p2 = new BlindDecorator(p2);}
-					else {p1 = new BlindDecorator(p1);}
-				} else if (decorator == "heavy"){
-					if(activePlayer->getPlayerId() == 1) {p2 = new HeavyDecorator(p2);}
-					else {p1 = new HeavyDecorator(p1);}
-				} else if (decorator == "force"){
-					char type;
-					std::cin >> type;
-					if(activePlayer->getPlayerId() == 1) {p2 = new ForceDecorator(p2, type);}
-					else {p1 = new ForceDecorator(p1, type);}
-				}
+		if(activePlayer->drop() >= 2){
+			std::string decorator;
+            std::cout << "Enter your Special Command:" <<std::endl;
+			std::cin >> decorator;
+			if(decorator == "blind"){
+				if(activePlayer->getPlayerId() == 1) {
+                    p2 = new BlindDecorator(p2);
+                } else {
+                    p1 = new BlindDecorator(p1);
+                }
+			} else if (decorator == "heavy"){
+				if(activePlayer->getPlayerId() == 1) {
+                    p2 = new HeavyDecorator(p2);
+                }
+			    else {
+                    p1 = new HeavyDecorator(p1);
+                }
+			} else if (decorator == "force"){
+			    char type;
+				std::cin >> type;
+				if(activePlayer->getPlayerId() == 1) {
+                    p2 = new ForceDecorator(p2, type);
+                }
+                else {
+                    p1 = new ForceDecorator(p1, type);
+                }
 			}
 		}
-		
-		//Print before setting the nextBlock as game could be over
-		printPlayers(activePlayer,p1,p2, highScore);
-
-        //Undecorate the player
-        //TODO
-
-        //Set next block on the board
-        activePlayer->setNextBlock();
-
-        //Change player that is in control as turn is over when drop
-        if(activePlayer->getPlayerId() == 1){
-            activePlayer = p2;
-        } else {
-            activePlayer = p1;
-        }
+        changeTurn(activePlayer, p1, p2); 
     } else if (s == "levelup"){
         activePlayer->levelUp(times);
     } else if (s == "leveldown"){

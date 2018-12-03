@@ -9,11 +9,28 @@ ForceDecorator::~ForceDecorator(){
     delete player;
 }
 
+Player* ForceDecorator::getBasePlayer(){
+    Player *tmp = player->getBasePlayer();
+    if (tmp != player){
+        delete player;
+    }
+    return tmp;
+}
+
 std::vector<GridCell>* ForceDecorator::getRow(int rowNum){
     return player->getRow(rowNum);
 }
 
+bool ForceDecorator::isHeavyLevel(){
+    return player->isHeavyLevel();
+}
+
+void ForceDecorator::setHeavyLevel(bool isHeavy){
+    player->setHeavyLevel(isHeavy);
+}
+
 void ForceDecorator::printRow (int rowNum) {
+    player->replaceBlock(blockType);
     player->printRow(rowNum);
 }
 
@@ -38,7 +55,7 @@ char ForceDecorator::getNextBlock(){
 }
 
 void ForceDecorator::setNextBlock(){
-    player->setNextBlockChar(this->blockType);
+    //player->setNextBlockChar(this->blockType);
     player->setNextBlock();
 }
 
@@ -58,8 +75,8 @@ void ForceDecorator::rotate(std::string direction, int times){
     player->rotate(direction, times);
 }
 
-int ForceDecorator::drop(int times){
-    return player->drop(times);
+int ForceDecorator::drop(){
+    return player->drop();
 }
 
 /*
@@ -73,19 +90,19 @@ char ForceDecorator::getNextBlockChar() {
 }
 
 void ForceDecorator::levelUp(int times) {
-    return levelUp(times);
+    player->levelUp(times);
 }
 
 void ForceDecorator::levelDown(int times) {
-    return levelDown(times);
+    player->levelDown(times);
 }
 
 void ForceDecorator::noRandom(std::string sequencefile) {
-    return noRandom(sequencefile);
+    player->noRandom(sequencefile);
 }
 
 void ForceDecorator::random() {
-    return random();
+    player->random();
 }
 
 void ForceDecorator::replaceBlock(char c) {

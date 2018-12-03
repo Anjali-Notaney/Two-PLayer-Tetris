@@ -22,6 +22,7 @@ class Player{
     Block *currBlock = nullptr;
     bool playerId;
     static bool playerOnePlaying;
+    bool heavyLevel;
     
 >>>>>>> master
     public:
@@ -30,8 +31,10 @@ class Player{
     Player();
     virtual std::vector<GridCell>* getRow(int rowNum) = 0;
     virtual void printRow (int rowNum) = 0;
+    virtual bool isHeavyLevel() = 0;
+    virtual void setHeavyLevel(bool isHeavy) = 0;
     virtual bool getPlayerId() = 0;
-    //virtual Player* getBasePlayer() = 0;
+    virtual Player* getBasePlayer() = 0;
     bool isPlayerOnePlaying();
     int getGridWidth();
     int getGridHeight();
@@ -56,13 +59,16 @@ class Player{
     virtual void rotate(std::string direction, int times) = 0;
     virtual void levelUp(int times) = 0;
     virtual void levelDown(int times) = 0;
-    virtual int drop(int times) = 0;
+    virtual int drop() = 0;
     virtual void noRandom(std::string sequencefile) = 0;
     virtual void random() = 0;
     virtual void replaceBlock(char c) = 0;
+<<<<<<< HEAD
     //virtual void print() = 0;
 >>>>>>> master
     //virtual void addBlockOnBoard(Block *b) = 0;
+=======
+>>>>>>> master
 };
 
 #endif

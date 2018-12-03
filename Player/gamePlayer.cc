@@ -18,15 +18,14 @@
 
 
 //GamePlayer::GamePlayer(xWindow &w){}
-<<<<<<< HEAD
-GamePlayer::GamePlayer(Grid* grid, Level *level, Xwindow* window):grid(grid), level(level), window(window){
-  nextBlock = getNextBlock();
-  this->displayBounds.first = std::make_pair(0, 0); // top left corner
-  this->displayBounds.second = std::make_pair(250, 500); // bottom right corner
-=======
+
 GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):Player(grid, level, id){
-    nextBlock = getNextBlock();
->>>>>>> master
+  nextBlock = getNextBlock();
+  if ((level->getLevel() == 3) or (level->getLevel() == 4)){
+      heavyLevel = true;
+  }
+  else heavyLevel = false;
+  nextBlock = getNextBlock();
 }
 //GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):grid{grid}, level{level}, playerId{id}{}
 
@@ -36,11 +35,23 @@ GamePlayer::~GamePlayer(){
 }
 
 bool GamePlayer::getPlayerId(){
-    return this->playerId;
+  return this->playerId;
+}
+
+Player* GamePlayer::getBasePlayer() {
+  return this;
 }
 
 std::vector<GridCell>* GamePlayer::getRow(int rowNum){
   return grid->getRow(rowNum);
+}
+
+bool GamePlayer::isHeavyLevel(){
+  return heavyLevel;
+}
+
+void GamePlayer::setHeavyLevel(bool isHeavy){
+  heavyLevel = isHeavy;
 }
 
 void GamePlayer::printRow (int rowNum) {
@@ -98,19 +109,36 @@ void GamePlayer::moveLeft(int times) {
   for(int i = times; i > 0; i--){
     currBlock->moveLeft();
   }
+  if (heavyLevel){
+    if (!this->moveDown(0)){
+    }
+  }
 }
 
 void GamePlayer::moveRight(int times) {
   for(int i = times; i > 0; i--){
     currBlock->moveRight();
   }
+  if (heavyLevel){
+    if (!this->moveDown(0)){
+    }
+  }
 }
 
 bool GamePlayer::moveDown(int times) {
   for(int i = times; i > 0; i--){
     if(currBlock->moveDown() == false){
+      if (heavyLevel){
+        this->drop();
+      }
       return false;
-    };
+    }
+  }
+  if (heavyLevel){
+    if (!currBlock->moveDown()){
+      this->drop();
+      return false;
+    }
   }
   return true;
 }
@@ -118,6 +146,10 @@ bool GamePlayer::moveDown(int times) {
 void GamePlayer::rotate(std::string direction, int times){
   for(int i = times; i > 0; i--){
     currBlock->rotate(direction);
+  }
+  if (heavyLevel){
+    if (!this->moveDown(1)){
+    }
   }
 }
 
@@ -137,15 +169,19 @@ void GamePlayer::levelUp(int times){
       switch(levelNum){
         case 0:
           level = new Level1();
+          heavyLevel = false;
           break;
         case 1:
           level = new Level2();
+          heavyLevel = false;
           break;
         case 2:
           level = new Level3();
+          heavyLevel = true;
           break;
         case 3:
           level = new Level4(grid);
+          heavyLevel = true;
           break;
       }
     }
@@ -159,30 +195,37 @@ void GamePlayer::levelDown(int times){
       delete level;
       switch(levelNum){
         case 1:
-          //If differennt sequencefile is defined and player 1
+          //If different sequencefile is defined and player 1
           #ifdef scriptfile1
           if(playerId == 1) level = new Level0("scriptfile1");
+          heavyLevel = false;
           break;
           #endif
           //Otherwise just use sequence1.txt
           if(playerId == 1) level = new Level0("sequence1.txt");
+           heavyLevel = false;
 
           //If different sequencefile is defined and player 2
           #ifdef scriptfile2
           if(playerId == 0) level = new Level0("scriptfile2");
+          heavyLevel = false; = false;
           break;
           #endif
           //Otherwise just use sequence2.txt
           if(playerId == 0) level = new Level0("sequence2.txt");
+          heavyLevel = false;
           break;
         case 2:
           level = new Level1();
+          heavyLevel = false;
           break;
         case 3:
           level = new Level2();
+          heavyLevel = false;
           break;
         case 4:
           level = new Level3();
+           heavyLevel = true;
           break;
       }
     }
@@ -207,64 +250,7 @@ void GamePlayer::replaceBlock(char c){
   getBlock(c);
 }
 
-<<<<<<< HEAD
-void GamePlayer::drawXWindowBoard(){
-  // Draw the level and the Score
-  this->window->drawString(displayBounds.first.first, displayBounds.first.second + 
-    (displayBounds.second.second - displayBounds.first.second)*0.05, (std::string)"Level: " + std::to_string(this->getLevel()));
-  this->window->drawString(displayBounds.first.first, displayBounds.first.second + 
-    (displayBounds.second.second - displayBounds.first.second)*0.1, (std::string)"Score: " + std::to_string(this->getScore()));
-
-  // Draw the grid
-  this->window->setFill("000000");
-  this->window->fillRectangle(displayBounds.first.first, displayBounds.first.second + 
-    (displayBounds.second.second - displayBounds.first.second)*0.15, displayBounds.second.first, displayBounds.second.second);
-
-  // Draw the blocks
-  for(int row = 0; row < this->grid->getHeight(); row++){
-    for(int col = 0; col < this->grid->getWidth(); col++){
-      GridCell* temp_cell = this->grid->getGridCell(col, row);
-      if(temp_cell->isUsed){
-        // int scaledHeight = (displayBounds.second.second - displayBounds.first.second)*0.15;
-        this->window->setFill(Block::colours[temp_cell->getType()]);
-        this->window->fillRectangle(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
-          (displayBounds.second.first - displayBounds.first.first)*(1.0/(float)this->grid->getWidth()),
-          (displayBounds.second.second - displayBounds.first.second)*(1.0/(float)this->grid->getHeight()));
-
-        // stroke the edge of the blocks with white
-        this->window->setFill("ffffff");
-        // top
-        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
-          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()));
-
-        // bottom
-        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()),
-          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()));
-
-        // left side
-        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)col/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
-          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col)/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()));
-
-        // right side
-        this->window->drawLine(displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)row/(float)this->grid->getHeight()),
-          displayBounds.first.first + (displayBounds.second.first - displayBounds.first.first)*((float)(col + 1)/(float)this->grid->getWidth()),
-          displayBounds.first.second + (displayBounds.second.second - displayBounds.first.second)*((float)(row + 1)/(float)this->grid->getHeight()));
-      }
-    }
-  }
-}
-
 //Harsh
-=======
->>>>>>> master
 
 //When a block is dropped, we go through all the rows of the grid.
 //If the row is full then we loop through the row
@@ -302,7 +288,6 @@ void GamePlayer::shiftCellsDown(int rowCleared){
   for(auto i : blocksOnBoard){
     i->moveCellsDown(rowCleared);
   }
-  
 }
 
 //If the block is empty (i.e has no cells) delete it
@@ -316,7 +301,7 @@ void GamePlayer::removeEmptyBlocks(){
   }
 }
 
-int GamePlayer::drop(int times) {
+int GamePlayer::drop() {
   while(currBlock->moveDown());
   blocksOnBoard.emplace_back(currBlock);
   int numRowsCleared = 0;

@@ -10,24 +10,24 @@ BlindDecorator::~BlindDecorator(){
     delete player;
 }
 
-/*
-std::vector<GridCell>* BlindDecorator::getRow(int rowNum){
-    std::vector<GridCell> *origVec = player->getRow(rowNum);
-    auto tmpVec = std::make_unique<std::vector<GridCell>>();
-    for (int i = 0; i < player->getGridWidth(); i++){
-        GridCell tmpCell = origVec->at(i);
-        if ((rowNum >= 3) and (rowNum <= 12) and (i >= 3) and (i <= 9)){
-            tmpCell.setType('?');
-            tmpCell.isUsed = true;  
-        }
-        tmpVec->emplace_back(tmpCell);
+Player* BlindDecorator::getBasePlayer(){
+    Player *tmp = player->getBasePlayer();
+    if (tmp != player){
+        delete player;
     }
-    return tmpVec;
+    return tmp;
 }
-*/
 
 std::vector<GridCell>* BlindDecorator::getRow(int rowNum){
     return player->getRow(rowNum);
+}
+
+bool BlindDecorator::isHeavyLevel(){
+    return player->isHeavyLevel();
+}
+
+void BlindDecorator::setHeavyLevel(bool isHeavy){
+    player->setHeavyLevel(isHeavy);
 }
 
 void BlindDecorator::printRow (int rowNum) {
@@ -82,34 +82,28 @@ void BlindDecorator::rotate(std::string direction, int times){
     player->rotate(direction, times);
 }
 
-int BlindDecorator::drop(int times){
-    return player->drop(times);
+int BlindDecorator::drop(){
+    return player->drop();
 }
-
-/*
-void BlindDecorator::print(){
-    player->print();
-}
-*/
 
 char BlindDecorator::getNextBlockChar() {
     return player->getNextBlockChar();
 }
 
 void BlindDecorator::levelUp(int times) {
-    return levelUp(times);
+    return player->levelUp(times);
 }
 
 void BlindDecorator::levelDown(int times) {
-    return levelDown(times);
+    return player->levelDown(times);
 }
 
 void BlindDecorator::noRandom(std::string sequencefile) {
-    return noRandom(sequencefile);
+    return player->noRandom(sequencefile);
 }
 
 void BlindDecorator::random() {
-    return random();
+    return player->random();
 }
 
 void BlindDecorator::replaceBlock(char c){

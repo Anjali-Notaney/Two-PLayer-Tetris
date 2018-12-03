@@ -12,7 +12,10 @@ class HeavyDecorator: public EffectsDecorator{
     public:
     HeavyDecorator(Player *component);
     ~HeavyDecorator() override;
+    Player* getBasePlayer() override;
     std::vector<GridCell>* getRow(int rowNum) override;
+    bool isHeavyLevel() override;
+    void setHeavyLevel(bool isHeavy) override;
     void printRow (int rowNum) override;
     bool getPlayerId() override;
     int getLevel() override;
@@ -24,14 +27,13 @@ class HeavyDecorator: public EffectsDecorator{
     void moveRight(int times) override;
     bool moveDown(int times) override;
     void rotate(std::string direction, int times) override;
-    int drop(int times) override;
+    int drop() override;
     char getNextBlockChar() override;
     void levelUp(int times) override;
     void levelDown(int times) override;
     void noRandom(std::string sequencefile) override;
     void random() override;
     void replaceBlock(char c) override;
-    //void print() override;
 };
 
 #endif

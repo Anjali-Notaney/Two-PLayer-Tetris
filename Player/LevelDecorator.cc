@@ -9,6 +9,14 @@ LevelDecorator::~LevelDecorator(){
      delete player;
 }
 
+Player* LevelDecorator::getBasePlayer(){
+    Player *tmp = player->getBasePlayer();
+    if (tmp != player){
+        delete player;
+    }
+    return tmp;
+}
+
 std::vector<GridCell>* LevelDecorator::getRow(int rowNum){
      return player->getRow(rowNum);
 }
