@@ -144,29 +144,31 @@ void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore, X
     std::cout << "+===========+\t\t+===========+" << std::endl;
 	std::cout << "╔═══════════╗\t\t╔═══════════╗" << std::endl;
 
-	// draw the background
-	window->setFill("111111");
-	window->fillRectangle(0, window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
-	window->fillRectangle(window->getWidth()*(0.66667), window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
-	window->setFill("222222");
-	const int rows = 18;
-    const int cols = 11;
+	if(window){
+		// draw the background
+		window->setFill("111111");
+		window->fillRectangle(0, window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
+		window->fillRectangle(window->getWidth()*(0.66667), window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
+		window->setFill("222222");
+		const int rows = 18;
+	    const int cols = 11;
 
-	for(int i = 0; i < cols; i++){
-		int pos = window->getWidth()*(float)((float)i/(float)(cols * 3));
-		window->drawLine(pos, window->getHeight()*0.15, pos, window->getHeight());
-		window->drawLine(pos + window->getWidth()*(0.66667), window->getHeight()*0.15, pos + window->getWidth()*(0.66667), window->getHeight());
-	}
-
-	for(int i = 0; i < rows; i++){
-		int pos = (window->getHeight()*0.85)*(float)((float)i/(float)rows);
-		if(i == 3){ // the drop line for the blocks
-			window->setFill("ffff00");
+		for(int i = 0; i < cols; i++){
+			int pos = window->getWidth()*(float)((float)i/(float)(cols * 3));
+			window->drawLine(pos, window->getHeight()*0.15, pos, window->getHeight());
+			window->drawLine(pos + window->getWidth()*(0.66667), window->getHeight()*0.15, pos + window->getWidth()*(0.66667), window->getHeight());
 		}
-		window->drawLine(0, window->getHeight()*0.15 + pos, window->getWidth()/3, window->getHeight()*0.15 + pos);
-		window->drawLine(window->getWidth()*(0.66667), window->getHeight()*0.15 + pos, window->getWidth(), window->getHeight()*0.15 + pos);
-		if(i == 3){ // the drop line for the blocks
-			window->setFill("222222");
+
+		for(int i = 0; i < rows; i++){
+			int pos = (window->getHeight()*0.85)*(float)((float)i/(float)rows);
+			if(i == 3){ // the drop line for the blocks
+				window->setFill("ffff00");
+			}
+			window->drawLine(0, window->getHeight()*0.15 + pos, window->getWidth()/3, window->getHeight()*0.15 + pos);
+			window->drawLine(window->getWidth()*(0.66667), window->getHeight()*0.15 + pos, window->getWidth(), window->getHeight()*0.15 + pos);
+			if(i == 3){ // the drop line for the blocks
+				window->setFill("222222");
+			}
 		}
 	}
 
@@ -345,10 +347,14 @@ void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &
 			}
 		}
         changeTurn(activePlayer, p1, p2);
-        drawStats(p1, p2, window, 6);
+        if(window){
+	        drawStats(p1, p2, window, 6);
+	    }
     } else if (s == "levelup"){
         activePlayer->levelUp(times, seed);
-        drawStats(p1, p2, window, 6, 'L');
+        if(window){
+	        drawStats(p1, p2, window, 6, 'L');
+	    }
     } else if (s == "leveldown"){
         activePlayer->levelDown(times,scriptfile1,scriptfile2, seed);
         drawStats(p1, p2, window, 6, 'L');
@@ -457,6 +463,45 @@ void drawStats(Player* p1, Player* p2, Xwindow* window, int numSections, char se
 	}
 }
 
+void initWindow(Xwindow* window, int highScore, float numSections){
+	// set middle
+	window->setFill("222288");
+	window->fillRectangle(0, 0, window->getWidth(), window->getHeight());
+	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, (std::string)"HIGHSCORE: " + std::to_string(highScore));
+	window->drawString(window->getWidth()/3 - 40, window->getHeight()*0.1, "Player 1");
+	window->drawString(window->getWidth()*(0.66667) - 40, window->getHeight()*0.1, "Player 2");
+
+	window->setFill("6666ff");
+	window->drawLine(window->getWidth()*(0.35), window->getHeight()*(0.15), window->getWidth()*(0.35), window->getHeight());
+	window->drawLine(window->getWidth()*(0.65), window->getHeight()*(0.15), window->getWidth()*(0.65), window->getHeight());
+
+	for(int i = 0; i < numSections; i++){ // dividers for the middle secion
+		std::string labels[] = {"LEVEL", "SCORE", "BIQUADRIS"};
+		window->drawLine(window->getWidth()*(0.35), window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections), window->getWidth()*(0.65), window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections));
+		if(i%2 == 0){
+			window->drawLine(window->getWidth()/2, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections), window->getWidth()/2, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)(i + 1)/numSections));
+		}else{
+			window->drawString(window->getWidth()/2 - 20, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), labels[i/2]);
+		}
+	}
+
+	window->fillRectangle(0, window->getHeight()*(0.13), window->getWidth(), window->getHeight()*(0.02));
+	window->fillRectangle(0, 0, window->getWidth(), window->getHeight()*(0.02));
+	window->fillRectangle(0, 0, window->getHeight()*(0.02), window->getHeight()*(0.15));
+	window->fillRectangle(window->getWidth() - window->getHeight()*(0.02), 0, window->getHeight()*(0.02), window->getHeight()*(0.15));
+
+
+	// set colours
+	Block::colours.emplace(std::make_pair('T', "cc33ff"));
+	Block::colours.emplace(std::make_pair('I', "66ffff"));
+	Block::colours.emplace(std::make_pair('L', "ff6600"));
+	Block::colours.emplace(std::make_pair('O', "ffff00"));
+	Block::colours.emplace(std::make_pair('S', "00cc00"));
+	Block::colours.emplace(std::make_pair('Z', "ff0000"));
+	Block::colours.emplace(std::make_pair('J', "3333cc"));
+	Block::colours.emplace(std::make_pair('*', "994d00"));
+}
+
 
 int main(int argc, const char* argv[]){
 	//Get the game flags
@@ -490,46 +535,13 @@ int main(int argc, const char* argv[]){
 	std::cout << numLevel << std::endl; 
 	std::cout << seed << std::endl; 
     //Initialize Game
-    Xwindow* window = new Xwindow(624, 400);
-	int highScore = 0;
-
-	// set middle
-	window->setFill("222288");
-	window->fillRectangle(0, 0, window->getWidth(), window->getHeight());
-	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, (std::string)"HIGHSCORE: " + std::to_string(highScore));
-	window->drawString(window->getWidth()/3 - 40, window->getHeight()*0.1, "Player 1");
-	window->drawString(window->getWidth()*(0.66667) - 40, window->getHeight()*0.1, "Player 2");
-
-	window->setFill("6666ff");
-	window->drawLine(window->getWidth()*(0.35), window->getHeight()*(0.15), window->getWidth()*(0.35), window->getHeight());
-	window->drawLine(window->getWidth()*(0.65), window->getHeight()*(0.15), window->getWidth()*(0.65), window->getHeight());
-	float numSections = 6.0;
-
-	for(int i = 0; i < numSections; i++){ // dividers for the middle secion
-		std::string labels[] = {"LEVEL", "SCORE", "BIQUADRIS"};
-		window->drawLine(window->getWidth()*(0.35), window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections), window->getWidth()*(0.65), window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections));
-		if(i%2 == 0){
-			window->drawLine(window->getWidth()/2, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections), window->getWidth()/2, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)(i + 1)/numSections));
-		}else{
-			window->drawString(window->getWidth()/2 - 20, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), labels[i/2]);
-		}
-	}
-
-	window->fillRectangle(0, window->getHeight()*(0.13), window->getWidth(), window->getHeight()*(0.02));
-	window->fillRectangle(0, 0, window->getWidth(), window->getHeight()*(0.02));
-	window->fillRectangle(0, 0, window->getHeight()*(0.02), window->getHeight()*(0.15));
-	window->fillRectangle(window->getWidth() - window->getHeight()*(0.02), 0, window->getHeight()*(0.02), window->getHeight()*(0.15));
-
-
-	// set colours
-	Block::colours.emplace(std::make_pair('T', "cc33ff"));
-	Block::colours.emplace(std::make_pair('I', "66ffff"));
-	Block::colours.emplace(std::make_pair('L', "ff6600"));
-	Block::colours.emplace(std::make_pair('O', "ffff00"));
-	Block::colours.emplace(std::make_pair('S', "00cc00"));
-	Block::colours.emplace(std::make_pair('Z', "ff0000"));
-	Block::colours.emplace(std::make_pair('J', "3333cc"));
-	Block::colours.emplace(std::make_pair('*', "994d00"));
+    Xwindow* window = nullptr;
+    float numSections = 6.0;
+    int highScore = 0;
+    if(!onlyText){
+    	window = new Xwindow(624, 400);
+    	initWindow(window, highScore, numSections);
+    }
 
 	while(true){
 		std::vector<std::string> commands = initVector();
@@ -542,12 +554,17 @@ int main(int argc, const char* argv[]){
 		p1->setNextBlock();
 		p2->setNextBlock();
 
-		// change the display offset of player 2
-		static_cast<GamePlayer*>(p2)->setDisplayOffset(window->getWidth()*(0.6667));
+		if(window){
+			// change the display offset of player 2
+			static_cast<GamePlayer*>(p2)->setDisplayOffset(window->getWidth()*(0.6667));
+		}
+
 		//Set active player to player one
 		Player *activePlayer = p1;
 
-		drawStats(p1, p2, window, numSections);
+		if(window){
+			drawStats(p1, p2, window, numSections);
+		}
 
 		//GAME LOOP
 		printPlayers(activePlayer,p1,p2,highScore, window);

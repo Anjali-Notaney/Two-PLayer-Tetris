@@ -46,24 +46,26 @@ void BlindDecorator::printRow (int rowNum, Xwindow* window) {
     }
 
     // Xwindow graphics
-    const int rows = 18;
-    const int cols = 11;
+    if(window){
+        const int rows = 18;
+        const int cols = 11;
 
-    for (int i = 0; i < gridRow.size(); i++){
-         if(rowNum >= 5 && rowNum <= 14 && i >= 2 && i <= 8){
-            window->setFill("000000");
-            window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
-            (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
-                ,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
+        for (int i = 0; i < gridRow.size(); i++){
+             if(rowNum >= 5 && rowNum <= 14 && i >= 2 && i <= 8){
+                window->setFill("000000");
+                window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
+                (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
+                    ,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
 
-            window->drawString(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))) + ceil((window->getWidth()/3)/cols)/2, 
-            (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows)) + ceil((window->getHeight()*0.85)/rows)/2,
-            "?");
-        }else if(gridRow.at(i).isUsed){
-            window->setFill(Block::colours[gridRow.at(i).getType()]);
-            window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
-            (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
-                ,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
+                window->drawString(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))) + ceil((window->getWidth()/3)/cols)/2, 
+                (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows)) + ceil((window->getHeight()*0.85)/rows)/2,
+                "?");
+            }else if(gridRow.at(i).isUsed){
+                window->setFill(Block::colours[gridRow.at(i).getType()]);
+                window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
+                (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
+                    ,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
+            }
         }
     }
 }
@@ -121,7 +123,7 @@ void BlindDecorator::levelUp(int times, int seed) {
 }
 
 void BlindDecorator::levelDown(int times, std::string scriptfile1, std::string scriptfile2, int seed) {
-    return player->levelDown(times,scriptfile1,scriptfile2, seed);
+    return player->levelDown(times, scriptfile1, scriptfile2, seed);
 }
 
 void BlindDecorator::noRandom(std::string sequencefile) {

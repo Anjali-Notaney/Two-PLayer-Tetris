@@ -19,8 +19,8 @@
 #include <iterator>
 #include <cmath>
 
-
-
+#define STRINGIZE(x) #x
+#define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
 
 
 //GamePlayer::GamePlayer(xWindow &w){}
@@ -71,17 +71,19 @@ void GamePlayer::printRow (int rowNum, Xwindow* window) {
         std::cout << cells;
     }
 
-    // Xwindow graphics
-    const int rows = 18;
-    const int cols = 11;
+    if(window){
+      // Xwindow graphics
+      const int rows = 18;
+      const int cols = 11;
 
-    for (int i = 0; i < gridRow.size(); i++){
-    	if(gridRow.at(i).isUsed){
-	        window->setFill(Block::colours[gridRow.at(i).getType()]);
-	        window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
-            (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
-	        	,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
-	    }
+      for (int i = 0; i < gridRow.size(); i++){
+      	if(gridRow.at(i).isUsed){
+  	        window->setFill(Block::colours[gridRow.at(i).getType()]);
+  	        window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
+              (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
+  	        	,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
+  	    }
+      }
     }
 }
 
@@ -211,7 +213,6 @@ void GamePlayer::levelUp(int times, int seed){
     }
   }
 }
-
 void GamePlayer::levelDown(int times, std::string scriptfile1, std::string scriptfile2, int seed){
   for(int i = times; i > 0; i--){
     int levelNum = level->getLevel();

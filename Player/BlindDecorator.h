@@ -23,8 +23,8 @@ class BlindDecorator: public EffectsDecorator{
     bool getPlayerId() override;
     void setNextBlockChar(char c) override;
     int getLevel() override;
-    int getScore() override;
     char getNextBlock() override;
+    int getScore() override;
     void setNextBlock() override;
     void moveLeft(int times) override;
     void moveRight(int times) override;
