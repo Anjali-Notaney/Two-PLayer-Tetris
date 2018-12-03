@@ -8,7 +8,7 @@
 
 class Level2 : public Level{
     public:
-    Level2();
+    Level2(int seed);
     ~Level2();
     char getNextBlock() override; //Returns a char
     void noRandom(std::string sequencefile) override;

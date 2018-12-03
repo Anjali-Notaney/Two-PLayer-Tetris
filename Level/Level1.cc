@@ -1,10 +1,10 @@
 #include "Level1.h"
 #include <stdlib.h>
 
-Level1::Level1():Level(1){
-    #ifdef seed
-    srand(seed);
-    #endif 
+Level1::Level1(int seed):Level(1){
+    if (seed != -1){
+        srand(seed);
+    }
 }
 
 Level1::~Level1(){}

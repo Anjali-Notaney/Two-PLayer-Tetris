@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-Level3::Level3():Level(3){
-    #ifdef seed
+Level3::Level3(int seed):Level(3){
+    if(seed != -1){
     srand(seed);
-    #endif 
+    } 
 }
 
 Level3::~Level3(){}

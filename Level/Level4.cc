@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-Level4::Level4(Grid* g):Level(4), g(g){
-    #ifdef seed
+Level4::Level4(Grid* g, int seed):Level(4), g(g){
+    if(seed != -1){
     srand(seed);
-    #endif 
+    }
 }
 
 Level4::~Level4(){}
