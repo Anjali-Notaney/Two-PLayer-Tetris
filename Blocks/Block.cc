@@ -1,12 +1,7 @@
 #include "Block.h"
 #include <algorithm>
 
-<<<<<<< HEAD
-Block::Block(Grid* g, char c):type(c), grid(g){}
-=======
 Block::Block(Grid* g, char c, int generatedLevel):grid(g),type(c),generatedLevel(generatedLevel){}
->>>>>>> master
-
 Block::~Block(){}
 
 void Block::setUpBlock(){

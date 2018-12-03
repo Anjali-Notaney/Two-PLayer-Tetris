@@ -13,6 +13,7 @@
 #include "../Level/Level2.h"
 #include "../Level/Level3.h"
 #include "../Level/Level4.h"
+#include "../XWindow/XWindow.h"
 #include <sstream>
 #include <string>
 
@@ -26,6 +27,7 @@ GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):Player(grid, level, id
   }
   else heavyLevel = false;
   nextBlock = getNextBlock();
+  displayOffset = 0;
 }
 //GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):grid{grid}, level{level}, playerId{id}{}
 
@@ -54,10 +56,22 @@ void GamePlayer::setHeavyLevel(bool isHeavy){
   heavyLevel = isHeavy;
 }
 
-void GamePlayer::printRow (int rowNum) {
+void GamePlayer::printRow (int rowNum, Xwindow* window) {
     std::vector<GridCell> gridRow = *(this->grid->getRow(rowNum));
     for (auto cells : gridRow){
         std::cout << cells;
+    }
+
+    // Xwindow graphics
+    const int rows = 18;
+    const int cols = 11;
+
+    for (int i = 0; i < gridRow.size(); i++){
+    	if(gridRow.at(i).isUsed){
+	        window->setFill(Block::colours[gridRow.at(i).getType()]);
+	        window->fillRectangle(this->displayOffset + i*((window->getWidth()/3)/cols), (window->getHeight()*0.15) + rowNum*((window->getHeight()*0.85)/rows)
+	        	,(window->getWidth()/3)/cols, (window->getHeight()*0.85)/rows);
+	    }
     }
 }
 
@@ -349,5 +363,9 @@ int GamePlayer::drop() {
 
   //Return the num rows cleared
   return numRowsCleared;
+}
+
+void GamePlayer::setDisplayOffset(int value){
+	this->displayOffset = value;
 }
 

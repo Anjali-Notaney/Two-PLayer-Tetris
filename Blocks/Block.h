@@ -19,12 +19,9 @@ class Block {
     int generatedLevel;
 
     public:
-<<<<<<< HEAD
-    static std::map <char, std::string> colours;
-    Block(Grid* g, char type);
-=======
+    static std::map<char, std::string> colours;
     Block(Grid* g, char type, int generatedLevel);
->>>>>>> master
+
     virtual ~Block() = 0;
     void setUpBlock();
     bool moveLeft();  

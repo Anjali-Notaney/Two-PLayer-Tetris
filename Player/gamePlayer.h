@@ -6,16 +6,17 @@
 #include "../Blocks/Block.h"
 #include "../Level/Level.h"
 
+class XWindow;
+
 class GamePlayer: public Player{
     std::vector<Block*> blocksOnBoard;
     std::pair <std::pair<int, int>, std::pair<int, int>> displayBounds; // defines the space in the window where the display is drawn
     void shiftCellsDown(int y);
     void removeEmptyBlocks();
     void getBlock(char blockChar);
+    int displayOffset;
 
     public:
-    Xwindow *window;
-
     //GamePlayer::GamePlayer(xWindow &w);
 
     GamePlayer(Grid *grid, Level *level, bool id);
@@ -25,7 +26,7 @@ class GamePlayer: public Player{
     std::vector<GridCell>* getRow(int rowNum) override;
     bool isHeavyLevel() override;
     void setHeavyLevel(bool isHeavy) override;
-    void printRow (int rowNum) override;
+    void printRow (int rowNum, Xwindow* window = nullptr) override;
     int getLevel() override;
     int getScore() override;
     char getNextBlock() override;
@@ -42,5 +43,6 @@ class GamePlayer: public Player{
     void noRandom(std::string sequencefile) override;
     void random() override;
     void replaceBlock(char c) override;
+    void setDisplayOffset(int value);
 };
 #endif
