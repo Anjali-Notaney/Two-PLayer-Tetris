@@ -30,7 +30,7 @@ void BlindDecorator::setHeavyLevel(bool isHeavy){
     player->setHeavyLevel(isHeavy);
 }
 
-void BlindDecorator::printRow (int rowNum) {
+void BlindDecorator::printRow (int rowNum, Xwindow* window) {
     std::vector<GridCell> gridRow = *(player->getRow(rowNum));
     for (int i = 0; i < player->getGridWidth(); i++){
         if ((rowNum >= 6) and (rowNum <= 15) and (i >= 3) and (i <= 9)){
