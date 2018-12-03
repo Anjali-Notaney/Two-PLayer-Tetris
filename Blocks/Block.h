@@ -20,7 +20,7 @@ class Block {
 
     public:
     Block(Grid* g, char type, int generatedLevel);
-    virtual ~Block() = 0;
+    virtual ~Block();
     void setUpBlock();
     bool moveLeft();  
     bool moveRight();

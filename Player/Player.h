@@ -8,7 +8,7 @@
 class Player{
     // xWindow *window;
     protected:
-    int score;
+    int score = 0;
     Grid *grid;
     Level *level;
     char nextBlock;
