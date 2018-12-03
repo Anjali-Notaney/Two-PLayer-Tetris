@@ -101,7 +101,7 @@ void Block::shiftCoordinates (std::vector<int> &vec, int shift){
 bool Block::rotate(std::string direction){
   //storing xCoordinates and yCoordinates of each blockCell
   //in xCoords and yCoords respectively
-  for(auto i: blockCells){
+  for(auto &i: blockCells){
       xCoords.emplace_back(i->getX());
       yCoords.emplace_back(i->getY());
   }
@@ -113,11 +113,9 @@ bool Block::rotate(std::string direction){
   //finding the topLeft corner of the smallest rectangle containing the Block
   topLeft.first = *xMinMax.first;
   topLeft.second = *yMinMax.first;
-  
   //Making top left corner the origin (0,0)
   shiftCoordinates (xCoords, -(topLeft.first));
-  shiftCoordinates (yCoords, -(topLeft.second));
-  
+  shiftCoordinates (yCoords, -(topLeft.second)); 
   //Transpose of the block:
   xCoords.swap(yCoords);
   //For clockwise rotation
@@ -140,7 +138,7 @@ bool Block::rotate(std::string direction){
   xMinMax = std::minmax_element(xCoords.begin(), xCoords.end());
   yMinMax = std::minmax_element(yCoords.begin(), yCoords.end());
   topLeft.first = *xMinMax.first;
-  topLeft.second = *yMinMax.first;  
+  topLeft.second = *yMinMax.first; 
   shiftCoordinates (xCoords, -(topLeft.first));
   shiftCoordinates (yCoords, -(topLeft.second));
   //finding the new bottom left corner of the smallest recatangle containing the Block
@@ -151,12 +149,13 @@ bool Block::rotate(std::string direction){
   //Readjusting the coordinates to reflect the actual position on the grid
   shiftCoordinates (xCoords, xDiff);
   shiftCoordinates (yCoords, yDiff);
-  
   //Now xCoords and yCoords have the new coordinates for the blockCells
   //If they are out of grid's bounds, then return without rotation
   xMinMax = std::minmax_element(xCoords.begin(), xCoords.end());
   yMinMax = std::minmax_element(yCoords.begin(), yCoords.end());
   if (((*xMinMax.first) < 0) or ((*yMinMax.first) < 0) or ((*xMinMax.second) >= grid->getWidth()) or ((*yMinMax.second) >= grid->getHeight())){
+      xCoords.clear();
+      yCoords.clear();
       return false;
   }
   //Checking if new coordinates are used by any other blocks
@@ -169,7 +168,6 @@ bool Block::rotate(std::string direction){
           unUsedCells++;
       }
   }
-  
   //the new coordinates are avalaible, rotate the Block
   if (unUsedCells == 4){
       //make the current blockCells available
@@ -181,10 +179,15 @@ bool Block::rotate(std::string direction){
           blockCells.at(i)->setType(this->type);
           blockCells.at(i)->isUsed = true; 
       }
+      xCoords.clear();
+      yCoords.clear();
       return true;   
   }
+  xCoords.clear();
+  yCoords.clear();
   return false;
 }
+
 //Remove reference to cell in the blockCells vector
 void Block::removeCellFromBlock(int x, int y){
     for(int i = 0; i < blockCells.size(); i++){
