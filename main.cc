@@ -29,6 +29,8 @@
 #include <cctype>
 
 std::map<char, std::string> Block::colours = {};
+void drawBlock(int x, int y, char type, int width, Xwindow* window);
+void drawStats(Player* p1, Player* p2, Xwindow* window, int numSections, char setting = '-');
 
 void printPlayerBlocks(Player* p1, Player* p2){
 	char p1NextBlock = p1->getNextBlockChar();
@@ -146,15 +148,26 @@ void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore, X
 	window->setFill("111111");
 	window->fillRectangle(0, window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
 	window->fillRectangle(window->getWidth()*(0.66667), window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
-	window->setFill("333333");
-	for(int i = 0; i < window->getWidth()/3; i += (window->getWidth()/3)/11){
-		window->drawLine(i, window->getHeight()*0.15, i, window->getHeight());
-		window->drawLine(i + window->getWidth()*(0.66667), window->getHeight()*0.15, i + window->getWidth()*(0.66667), window->getHeight());
+	window->setFill("222222");
+	const int rows = 18;
+    const int cols = 11;
+
+	for(int i = 0; i < cols; i++){
+		int pos = window->getWidth()*(float)((float)i/(float)(cols * 3));
+		window->drawLine(pos, window->getHeight()*0.15, pos, window->getHeight());
+		window->drawLine(pos + window->getWidth()*(0.66667), window->getHeight()*0.15, pos + window->getWidth()*(0.66667), window->getHeight());
 	}
 
-	for(int i = window->getHeight()*0.15; i < window->getHeight(); i += (window->getHeight()*(0.85))/18){
-		window->drawLine(0, i, window->getWidth()/3, i);
-		window->drawLine(window->getWidth()*(0.66667), i, window->getWidth(), i);
+	for(int i = 0; i < rows; i++){
+		int pos = (window->getHeight()*0.85)*(float)((float)i/(float)rows);
+		if(i == 3){ // the drop line for the blocks
+			window->setFill("ffff00");
+		}
+		window->drawLine(0, window->getHeight()*0.15 + pos, window->getWidth()/3, window->getHeight()*0.15 + pos);
+		window->drawLine(window->getWidth()*(0.66667), window->getHeight()*0.15 + pos, window->getWidth(), window->getHeight()*0.15 + pos);
+		if(i == 3){ // the drop line for the blocks
+			window->setFill("222222");
+		}
 	}
 
     for(int i = 0; i < 18; i++){
@@ -275,7 +288,7 @@ void changeTurn( Player* &activePlayer, Player* &p1, Player* &p2){
 }
 
 //Execute the command given
-void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &p2, std::vector<std::string> commands, int highScore, int times = 1){
+void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &p2, std::vector<std::string> commands, int highScore, int times = 1, Xwindow* window = nullptr){
     if(s == "left"){
         activePlayer->moveLeft(times);
         if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
@@ -332,11 +345,14 @@ void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &
                 }
 			}
 		}
-        changeTurn(activePlayer, p1, p2); 
+        changeTurn(activePlayer, p1, p2);
+        drawStats(p1, p2, window, 6);
     } else if (s == "levelup"){
         activePlayer->levelUp(times);
+        drawStats(p1, p2, window, 6, 'L');
     } else if (s == "leveldown"){
         activePlayer->levelDown(times);
+        drawStats(p1, p2, window, 6, 'L');
     } else if (s == "norandom"){
         std::string sequencefile;
         std::cin >> sequencefile;
@@ -360,6 +376,87 @@ void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &
     }
 }
 
+void drawBlock(int x, int y, char type, int width, Xwindow* window){
+	window->setFill(Block::colours[type]);
+
+	switch (type) {
+	case 'S':
+		window->fillRectangle(x + width, y, width, width);
+		window->fillRectangle(x + 2*width, y, width, width);
+		window->fillRectangle(x, y + width, width, width);
+		window->fillRectangle(x + width, y + width, width, width);
+		break;
+	case 'Z':
+		window->fillRectangle(x, y, width, width);
+		window->fillRectangle(x + width, y, width, width);
+		window->fillRectangle(x + width, y + width, width, width);
+		window->fillRectangle(x + 2*width, y + width, width, width);
+		break;
+	case 'T':
+		window->fillRectangle(x + width, y, width, width);
+		window->fillRectangle(x + 2*width, y, width, width);
+		window->fillRectangle(x, y, width, width);
+		window->fillRectangle(x + width, y + width, width, width);
+		break;
+	case 'L':
+		window->fillRectangle(x + 2*width, y, width, width);
+		window->fillRectangle(x + 2*width, y + width, width, width);
+		window->fillRectangle(x, y + width, width, width);
+		window->fillRectangle(x + width, y + width, width, width);
+		break;
+	case 'J':
+		window->fillRectangle(x, y, width, width);
+		window->fillRectangle(x + 2*width, y + width, width, width);
+		window->fillRectangle(x, y + width, width, width);
+		window->fillRectangle(x + width, y + width, width, width);
+		break;
+	case 'O':
+		window->fillRectangle(x + width, y, width, width);
+		window->fillRectangle(x, y, width, width);
+		window->fillRectangle(x, y + width, width, width);
+		window->fillRectangle(x + width, y + width, width, width);
+		break;
+	case 'I':
+		window->fillRectangle(x + width, y, width, width);
+		window->fillRectangle(x + 2*width, y, width, width);
+		window->fillRectangle(x, y, width, width);
+		window->fillRectangle(x + 3*width, y, width, width);
+		break;
+	}
+}
+
+void drawStats(Player* p1, Player* p2, Xwindow* window, int numSections, char setting){ // takes the players and draws their scores, levels and blocks
+	if((setting != 'L' && setting != 'S') || setting == '-'){
+		// reset the backgrounds
+	window->setFill("222288");
+	window->fillRectangle(window->getWidth()*(0.36) - 2, window->getHeight()*(0.16) - 2, window->getWidth()*(0.15) - 5, (window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 3);
+	window->fillRectangle(window->getWidth()*(0.51) - 2, window->getHeight()*(0.16) - 2, window->getWidth()*(0.15) - 5, (window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 3);
+	// draw the player statistics
+		// next block
+	drawBlock(window->getWidth()*(0.36), window->getHeight()*(0.16), p1->getNextBlockChar(), ceil((window->getWidth()/3)/11.0) + 1, window);
+	drawBlock(window->getWidth()*(0.52), window->getHeight()*(0.16), p2->getNextBlockChar(), ceil((window->getWidth()/3)/11.0) + 1, window);
+	}
+
+	if((setting != 'B' && setting != 'S') || setting == '-'){
+		// reset the backgrounds
+	window->setFill("222288");
+	window->fillRectangle(window->getWidth()*(0.36) - 2, window->getHeight()*(0.16) + 2*(window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 2, window->getWidth()*(0.15)  - 5, (window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 3);
+	window->fillRectangle(window->getWidth()*(0.51) - 2, window->getHeight()*(0.16) + 2*(window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 2, window->getWidth()*(0.15)  - 5, (window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 3);
+		//levels
+	window->drawString(window->getWidth()*(0.33333) + window->getWidth()*(0.33333)/4, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)(2.0/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), std::to_string(p1->getLevel()));
+	window->drawString(window->getWidth()*(0.66667) - window->getWidth()*(0.33333)/4, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)(2.0/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), std::to_string(p2->getLevel()));
+	}
+
+	if((setting != 'B' && setting != 'L') || setting == '-'){
+		// reset the backgrounds
+	window->setFill("222288");
+	window->fillRectangle(window->getWidth()*(0.36) - 2, window->getHeight()*(0.16) + 4*(window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 2, window->getWidth()*(0.15) - 5, (window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 3);
+	window->fillRectangle(window->getWidth()*(0.51) - 2, window->getHeight()*(0.16) + 4*(window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 2, window->getWidth()*(0.15)  - 5, (window->getHeight()*(0.85))*(float)((float)1.0/numSections) - 3);
+		// scores
+	window->drawString(window->getWidth()*(0.33333) + window->getWidth()*(0.33333)/4, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)(4.0/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), std::to_string(p1->getScore()));
+	window->drawString(window->getWidth()*(0.66667) - window->getWidth()*(0.33333)/4, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)(4.0/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), std::to_string(p2->getScore()));
+	}
+}
 
 
 int main(){    
@@ -370,7 +467,30 @@ int main(){
 	// set middle
 	window->setFill("222288");
 	window->fillRectangle(0, 0, window->getWidth(), window->getHeight());
-	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, "BIQUADRIS!");
+	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, (std::string)"HIGHSCORE: " + std::to_string(highScore));
+	window->drawString(window->getWidth()/3 - 40, window->getHeight()*0.1, "Player 1");
+	window->drawString(window->getWidth()*(0.66667) - 40, window->getHeight()*0.1, "Player 2");
+
+	window->setFill("6666ff");
+	window->drawLine(window->getWidth()*(0.35), window->getHeight()*(0.15), window->getWidth()*(0.35), window->getHeight());
+	window->drawLine(window->getWidth()*(0.65), window->getHeight()*(0.15), window->getWidth()*(0.65), window->getHeight());
+	float numSections = 6.0;
+
+	for(int i = 0; i < numSections; i++){ // dividers for the middle secion
+		std::string labels[] = {"LEVEL", "SCORE", "BIQUADRIS"};
+		window->drawLine(window->getWidth()*(0.35), window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections), window->getWidth()*(0.65), window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections));
+		if(i%2 == 0){
+			window->drawLine(window->getWidth()/2, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections), window->getWidth()/2, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)(i + 1)/numSections));
+		}else{
+			window->drawString(window->getWidth()/2 - 20, window->getHeight()*(0.15) + (window->getHeight()*(0.85))*(float)((float)i/numSections) + (window->getHeight()*(0.85))*(0.5/numSections), labels[i/2]);
+		}
+	}
+
+	window->fillRectangle(0, window->getHeight()*(0.13), window->getWidth(), window->getHeight()*(0.02));
+	window->fillRectangle(0, 0, window->getWidth(), window->getHeight()*(0.02));
+	window->fillRectangle(0, 0, window->getHeight()*(0.02), window->getHeight()*(0.15));
+	window->fillRectangle(window->getWidth() - window->getHeight()*(0.02), 0, window->getHeight()*(0.02), window->getHeight()*(0.15));
+
 
 	// set colours
 	Block::colours.emplace(std::make_pair('T', "cc33ff"));
@@ -380,6 +500,7 @@ int main(){
 	Block::colours.emplace(std::make_pair('S', "00cc00"));
 	Block::colours.emplace(std::make_pair('Z', "ff0000"));
 	Block::colours.emplace(std::make_pair('J', "3333cc"));
+	Block::colours.emplace(std::make_pair('*', "994d00"));
 
 	while(true){
 		std::vector<std::string> commands = initVector();
@@ -397,6 +518,8 @@ int main(){
 		//Set active player to player one
 		Player *activePlayer = p1;
 
+		drawStats(p1, p2, window, numSections);
+
 		//GAME LOOP
 		printPlayers(activePlayer,p1,p2,highScore, window);
 		while(!std::cin.fail()){
@@ -405,7 +528,7 @@ int main(){
 				std::cin >> s;
 				int numTimes = getNumTimes(s);
 				s = matchCommand(s, commands);
-				executeCommand(s,activePlayer, p1, p2, commands, highScore, numTimes);
+				executeCommand(s,activePlayer, p1, p2, commands, highScore, numTimes, window);
 				if(p1->getScore() > highScore || p2->getScore() > highScore) highScore += std::max(p1->getScore(), p2->getScore());
 				printPlayers(activePlayer,p1,p2,highScore, window);
 			} catch(std::exception){

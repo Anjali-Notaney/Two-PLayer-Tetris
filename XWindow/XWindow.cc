@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Xwindow::Xwindow(int width, int height) {
+Xwindow::Xwindow(int width, int height): width{width}, height{height}{
 
   d = XOpenDisplay(NULL);
   if (d == NULL) {
@@ -101,5 +101,13 @@ void Xwindow::drawLine(int x1, int y1, int x2, int y2, int colour) {
   XSetForeground(d, gc, this->fill);
   XDrawLine(d, w, gc, x1, y1, x2, y2);
   XSetForeground(d, gc, this->fill);
+}
+
+int Xwindow::getWidth(){
+  return this->width;
+}
+
+int Xwindow::getHeight(){
+  return this->height;
 }
 

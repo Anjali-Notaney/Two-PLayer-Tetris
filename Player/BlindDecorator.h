@@ -6,8 +6,11 @@
 #include <vector>
 #include <string>
 
+class XWindow;
+
 class BlindDecorator: public EffectsDecorator{
     Player *player;
+    int displayOffset;
     
     public:
     BlindDecorator(Player *component);
@@ -16,7 +19,7 @@ class BlindDecorator: public EffectsDecorator{
     std::vector<GridCell>* getRow(int rowNum) override;
     bool isHeavyLevel() override;
     void setHeavyLevel(bool isHeavy) override;
-    void printRow (int rowNum) override;
+    void printRow (int rowNum, Xwindow* window = nullptr) override;
     bool getPlayerId() override;
     void setNextBlockChar(char c) override;
     int getLevel() override;
@@ -34,6 +37,7 @@ class BlindDecorator: public EffectsDecorator{
     void noRandom(std::string sequencefile) override;
     void random() override;
     void replaceBlock(char c) override;
+    void setDisplayOffset(int value);
 };
 
 

@@ -30,7 +30,7 @@ std::vector<GridCell>* HeavyDecorator::getRow(int rowNum){
 }
 
 
-void HeavyDecorator::printRow (int rowNum) {
+void HeavyDecorator::printRow (int rowNum, Xwindow* window) {
     player->printRow(rowNum);
 }
 

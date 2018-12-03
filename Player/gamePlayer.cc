@@ -17,6 +17,7 @@
 #include <sstream>
 #include <string>
 #include <iterator>
+#include <cmath>
 
 #define STRINGIZE(x) #x
 #define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
@@ -77,8 +78,9 @@ void GamePlayer::printRow (int rowNum, Xwindow* window) {
     for (int i = 0; i < gridRow.size(); i++){
     	if(gridRow.at(i).isUsed){
 	        window->setFill(Block::colours[gridRow.at(i).getType()]);
-	        window->fillRectangle(this->displayOffset + i*((window->getWidth()/3)/cols), (window->getHeight()*0.15) + rowNum*((window->getHeight()*0.85)/rows)
-	        	,(window->getWidth()/3)/cols, (window->getHeight()*0.85)/rows);
+	        window->fillRectangle(this->displayOffset + (window->getWidth()*(float)((float)i/(float)(cols * 3))), 
+            (window->getHeight()*0.15) + ((window->getHeight()*0.85)*(float)((float)rowNum/(float)rows))
+	        	,ceil((window->getWidth()/3)/cols) + 1, ceil((window->getHeight()*0.85)/rows) + 1);
 	    }
     }
 }
@@ -378,5 +380,9 @@ int GamePlayer::drop() {
 
 void GamePlayer::setDisplayOffset(int value){
 	this->displayOffset = value;
+}
+
+int GamePlayer::getDisplayOffset(){
+  return this->displayOffset;
 }
 

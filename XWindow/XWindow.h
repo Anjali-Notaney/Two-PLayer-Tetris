@@ -10,6 +10,7 @@ class Xwindow {
   int s;
   GC gc;
   unsigned long fill;
+  int width, height;
 
  public:
   Xwindow(int width=500, int height=500);  // Constructor; displays the window.
@@ -34,6 +35,11 @@ class Xwindow {
 
   // Draws a line
   void drawLine(int x1, int y1, int x2, int y2, int colour=Black);
+
+  // get dimensions
+  int getWidth();
+
+  int getHeight();
 
 };
 

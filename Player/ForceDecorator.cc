@@ -29,7 +29,7 @@ void ForceDecorator::setHeavyLevel(bool isHeavy){
     player->setHeavyLevel(isHeavy);
 }
 
-void ForceDecorator::printRow (int rowNum) {
+void ForceDecorator::printRow (int rowNum, Xwindow* window) {
     player->replaceBlock(blockType);
     player->printRow(rowNum);
 }

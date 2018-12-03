@@ -14,7 +14,7 @@ class LevelDecorator: public EffectsDecorator{
     ~LevelDecorator() override;
     Player* getBasePlayer() override;
     std::vector<GridCell>* getRow(int rowNum) override;
-    void printRow (int rowNum) override;
+    void printRow (int rowNum, Xwindow* window = nullptr) override;
     bool getPlayerId() override;
     int getLevel() override;
     int getScore() override;

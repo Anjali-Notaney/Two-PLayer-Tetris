@@ -16,7 +16,7 @@ class HeavyDecorator: public EffectsDecorator{
     std::vector<GridCell>* getRow(int rowNum) override;
     bool isHeavyLevel() override;
     void setHeavyLevel(bool isHeavy) override;
-    void printRow (int rowNum) override;
+    void printRow (int rowNum, Xwindow* window = nullptr) override;
     bool getPlayerId() override;
     int getLevel() override;
     int getScore() override;

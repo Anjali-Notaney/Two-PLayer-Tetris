@@ -87,7 +87,7 @@ void LevelDecorator::rotate(std::string direction, int times){
     }
 }
 
-void LevelDecorator::printRow (int rowNum) {
+void LevelDecorator::printRow (int rowNum, Xwindow* window) {
     player->printRow(rowNum);
 }
 

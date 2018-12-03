@@ -44,5 +44,6 @@ class GamePlayer: public Player{
     void random() override;
     void replaceBlock(char c) override;
     void setDisplayOffset(int value);
+    int getDisplayOffset();
 };
 #endif
