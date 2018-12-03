@@ -30,8 +30,8 @@ class ForceDecorator: public EffectsDecorator{
     void rotate(std::string direction, int times)override;
     int drop() override;
     char getNextBlockChar() override;
-    void levelUp(int times) override;
-    void levelDown(int times) override;
+    void levelUp(int times, int seed) override;
+    void levelDown(int times, std::string scriptfile1, std::string scriptfile2, int seed) override;
     void noRandom(std::string sequencefile) override;
     void random() override;
     void replaceBlock(char c) override;

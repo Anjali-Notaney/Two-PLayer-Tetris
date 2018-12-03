@@ -12,7 +12,7 @@ class Level4 : public Level{
     std::string sequence;
     std::string file;
     public:
-    Level4(Grid* g); //This Level also adds a random cell in the middle of the board
+    Level4(Grid* g, int seed); //This Level also adds a random cell in the middle of the board
                      //and also makes generated blocks heavy.
     ~Level4();
     char getNextBlock() override; //Returns a char

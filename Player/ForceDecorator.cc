@@ -89,12 +89,12 @@ char ForceDecorator::getNextBlockChar() {
     return player->getNextBlockChar();
 }
 
-void ForceDecorator::levelUp(int times) {
-    player->levelUp(times);
+void ForceDecorator::levelUp(int times, int seed) {
+    player->levelUp(times, seed);
 }
 
-void ForceDecorator::levelDown(int times) {
-    player->levelDown(times);
+void ForceDecorator::levelDown(int times, std::string scriptfile1, std::string scriptfile2, int seed) {
+    player->levelDown(times,scriptfile1,scriptfile2, seed);
 }
 
 void ForceDecorator::noRandom(std::string sequencefile) {
