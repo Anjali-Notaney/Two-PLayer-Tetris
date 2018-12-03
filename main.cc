@@ -17,6 +17,7 @@
 #include "Level/Level2.h"
 #include "Level/Level3.h"
 #include "Level/Level4.h"
+#include "XWindow/XWindow.h"
 #include <sstream>
 #include <string>
 #include <map>
@@ -26,6 +27,8 @@
 #include <stdlib.h>
 #include <fstream>
 #include <cctype>
+
+std::map<char, std::string> Block::colours = {};
 
 void printPlayerBlocks(Player* p1, Player* p2){
 	char p1NextBlock = p1->getNextBlockChar();
@@ -129,7 +132,7 @@ void printPlayerBlocks(Player* p1, Player* p2){
 
 }
 
-void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore){
+void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore, Xwindow* window=nullptr){
     system("clear");
 	std::cout << "+====================+" << std::endl;
 	std::cout << " HIGHSCORE       " << highScore << std::endl;
@@ -138,16 +141,32 @@ void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore){
     std::cout << " Score:   " << p1->getScore() << " \t\t" << " Score:   " << p2->getScore() << std::endl;
     std::cout << "+===========+\t\t+===========+" << std::endl;
 	std::cout << "╔═══════════╗\t\t╔═══════════╗" << std::endl;
+
+	// draw the background
+	window->setFill("111111");
+	window->fillRectangle(0, window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
+	window->fillRectangle(window->getWidth()*(0.66667), window->getHeight()*0.15, window->getWidth()/3, window->getHeight());
+	window->setFill("333333");
+	for(int i = 0; i < window->getWidth()/3; i += (window->getWidth()/3)/11){
+		window->drawLine(i, window->getHeight()*0.15, i, window->getHeight());
+		window->drawLine(i + window->getWidth()*(0.66667), window->getHeight()*0.15, i + window->getWidth()*(0.66667), window->getHeight());
+	}
+
+	for(int i = window->getHeight()*0.15; i < window->getHeight(); i += (window->getHeight()*(0.85))/18){
+		window->drawLine(0, i, window->getWidth()/3, i);
+		window->drawLine(window->getWidth()*(0.66667), i, window->getWidth(), i);
+	}
+
     for(int i = 0; i < 18; i++){
 		if(i != 2) std::cout << "║";
 		else std::cout << "╠";
-        p1->printRow(i);
+        p1->printRow(i, window);
 		if(i != 2) std::cout << "║";
 		else std::cout << "╣";
         std::cout << "\t\t";
 		if(i != 2) std::cout << "║";
 		else std::cout << "╠";
-        p2->printRow(i);
+        p2->printRow(i, window);
         if(i != 2) std::cout << "║" << std::endl;
 		else std::cout << "╣" << std::endl;
     }
@@ -345,7 +364,23 @@ void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &
 
 int main(){    
     //Initialize Game
+    Xwindow* window = new Xwindow(624, 400);
 	int highScore = 0;
+
+	// set middle
+	window->setFill("222288");
+	window->fillRectangle(0, 0, window->getWidth(), window->getHeight());
+	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, "BIQUADRIS!");
+
+	// set colours
+	Block::colours.emplace(std::make_pair('T', "cc33ff"));
+	Block::colours.emplace(std::make_pair('I', "66ffff"));
+	Block::colours.emplace(std::make_pair('L', "ff6600"));
+	Block::colours.emplace(std::make_pair('O', "ffff00"));
+	Block::colours.emplace(std::make_pair('S', "00cc00"));
+	Block::colours.emplace(std::make_pair('Z', "ff0000"));
+	Block::colours.emplace(std::make_pair('J', "3333cc"));
+
 	while(true){
 		std::vector<std::string> commands = initVector();
 		Grid *g1 = new Grid();
@@ -357,11 +392,13 @@ int main(){
 		p1->setNextBlock();
 		p2->setNextBlock();
 
+		// change the display offset of player 2
+		static_cast<GamePlayer*>(p2)->setDisplayOffset(window->getWidth()*(0.6667));
 		//Set active player to player one
 		Player *activePlayer = p1;
 
 		//GAME LOOP
-		printPlayers(activePlayer,p1,p2,highScore);
+		printPlayers(activePlayer,p1,p2,highScore, window);
 		while(!std::cin.fail()){
 			try{
 				std::string s;
@@ -370,7 +407,7 @@ int main(){
 				s = matchCommand(s, commands);
 				executeCommand(s,activePlayer, p1, p2, commands, highScore, numTimes);
 				if(p1->getScore() > highScore || p2->getScore() > highScore) highScore += std::max(p1->getScore(), p2->getScore());
-				printPlayers(activePlayer,p1,p2,highScore);
+				printPlayers(activePlayer,p1,p2,highScore, window);
 			} catch(std::exception){
 				std::cout << "Game Over!" << std::endl;
 				if(activePlayer->getPlayerId() == 0){

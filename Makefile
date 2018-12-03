@@ -1,8 +1,8 @@
 MAINFLAGS = $(mainflags)
 LEVELFLAGS = $(levelflags)
 
-out: main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o
-	g++ -g -Dstartlevel=1 -std=c++14 main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o -o out
+out: main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o XWindow.o
+	g++ -g -Dstartlevel=1 -std=c++14 -L/usr/X11R6/lib  main.o Level.o Level0.o Level1.o Level2.o Level3.o Level4.o Grid.o GridCell.o Block.o JBlock.o LBlock.o SBlock.o ZBlock.o OBlock.o TBlock.o IBlock.o Player.o gamePlayer.o BlindDecorator.o ForceDecorator.o HeavyDecorator.o EffectsDecorator.o XWindow.o -o out -lX11
 
 main.o: main.cc
 	g++ -g ${MAINFLAGS} -std=c++14 -c main.cc
@@ -72,6 +72,9 @@ HeavyDecorator.o: Player/HeavyDecorator.h Player/HeavyDecorator.cc
 
 EffectsDecorator.o: Player/EffectsDecorator.h Player/EffectsDecorator.cc
 	g++ -g -std=c++14 -c Player/EffectsDecorator.cc
+
+XWindow.o: XWindow/XWindow.h XWindow/XWindow.cc
+	g++ -g -std=c++14 -c XWindow/XWindow.cc
 
 .PHONY: clean
 
