@@ -21,8 +21,8 @@ class Block {
     public:
     static std::map<char, std::string> colours;
     Block(Grid* g, char type, int generatedLevel);
-
-    virtual ~Block() = 0;
+    
+    virtual ~Block();
     void setUpBlock();
     bool moveLeft();  
     bool moveRight();

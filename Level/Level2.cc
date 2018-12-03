@@ -13,7 +13,7 @@ Level2::~Level2(){}
 char Level2::getNextBlock(){
     char blockChar;
     int random = rand() % 70;
-    //We generate a number from 0-6, 
+    //We generate a number from 0-70, 
     //then we assign a character to each number
     if(random >= 0 && random < 10){blockChar = 'S';}
     else if (random >= 10 && random < 20){blockChar = 'Z';}
