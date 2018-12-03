@@ -13,6 +13,8 @@ class Level0 : public Level{
     Level0(std::string file);
     ~Level0();
     char getNextBlock() override; //Returns a char
+    void noRandom(std::string sequencefile) override;
+    void random() override;
 };
 
 #endif

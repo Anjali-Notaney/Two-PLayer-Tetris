@@ -10,7 +10,11 @@ class Level3 : public Level{
     public:
     Level3(); //This Level also ads a heavy decorator
     ~Level3();
+    std::string sequence;
+    std::string file;
     char getNextBlock() override; //Returns a char
+    void noRandom(std::string sequencefile) override;
+    void random() override;
 };
 
 #endif

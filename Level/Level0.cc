@@ -20,4 +20,7 @@ char Level0::getNextBlock(){
     return blockChar;
 }
 
+void Level0::noRandom(std::string sequencefile){}
+
+void Level0::random(){}
 

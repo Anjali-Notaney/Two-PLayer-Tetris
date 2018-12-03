@@ -9,8 +9,7 @@
 
 class ZBlock : public Block {
     public:
-    ZBlock(Grid* g);
+    ZBlock(Grid* g, int generatedLevel);
     ~ZBlock();
 };
-
 #endif

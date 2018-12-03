@@ -9,7 +9,7 @@
 
 class JBlock : public Block {
     public:
-    JBlock(Grid* g);
+    JBlock(Grid* g, int generatedLevel);
     ~JBlock();
 };
 

@@ -1,3 +1,6 @@
 *vscode*
 *.o
 *.gch
+*.in
+a.out.dSYM/
+out

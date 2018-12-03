@@ -3,7 +3,7 @@
 #include "../Grid/GridCell.h"
 #include "../Grid/Grid.h"
 
-SBlock::SBlock(Grid* g):Block(g, 'S'){
+SBlock::SBlock(Grid* g, int generatedLevel):Block(g, 'S', generatedLevel){
     std::vector<GridCell*>tmp;
     tmp.emplace_back(g->getGridCell(0,3));
     tmp.emplace_back(g->getGridCell(1,3));
@@ -19,4 +19,3 @@ SBlock::SBlock(Grid* g):Block(g, 'S'){
 }
 
 SBlock::~SBlock(){}
-

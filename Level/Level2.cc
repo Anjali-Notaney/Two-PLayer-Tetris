@@ -3,7 +3,9 @@
 #include <time.h>
 
 Level2::Level2():Level(2){
-    srand(time(NULL));
+    #ifdef seed
+    srand(seed);
+    #endif 
 }
 
 Level2::~Level2(){}
@@ -22,3 +24,7 @@ char Level2::getNextBlock(){
     else if (random >= 60 && random < 70){blockChar = 'I';}
     return blockChar;  
 }
+
+void Level2::noRandom(std::string sequencefile){}
+
+void Level2::random(){}

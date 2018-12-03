@@ -5,8 +5,7 @@
 
 class IBlock : public Block{
     public:
-    IBlock(Grid* g);
+    IBlock(Grid* g, int generatedLevel);
     ~IBlock();
 };
-
 #endif

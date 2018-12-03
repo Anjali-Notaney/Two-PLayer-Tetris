@@ -11,6 +11,8 @@ class Level2 : public Level{
     Level2();
     ~Level2();
     char getNextBlock() override; //Returns a char
+    void noRandom(std::string sequencefile) override;
+    void random() override;
 };
 
 #endif

@@ -2,7 +2,9 @@
 #include <stdlib.h>
 
 Level1::Level1():Level(1){
-    srand(time(NULL));
+    #ifdef seed
+    srand(seed);
+    #endif 
 }
 
 Level1::~Level1(){}
@@ -21,3 +23,7 @@ char Level1::getNextBlock(){
     else if (random >= 10 && random <= 11){blockChar = 'I';}
     return blockChar;  
 }
+
+void Level1::noRandom(std::string sequencefile){}
+
+void Level1::random(){}

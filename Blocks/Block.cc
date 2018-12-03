@@ -1,7 +1,11 @@
 #include "Block.h"
 #include <algorithm>
 
+<<<<<<< HEAD
 Block::Block(Grid* g, char c):type(c), grid(g){}
+=======
+Block::Block(Grid* g, char c, int generatedLevel):grid(g),type(c),generatedLevel(generatedLevel){}
+>>>>>>> master
 
 Block::~Block(){}
 
@@ -12,21 +16,18 @@ void Block::setUpBlock(){
         i->isUsed = true;
     }
 }
-
 //Struct that holds an operator to compare cell X values
 struct CompareX {
   bool const operator()(GridCell* c1, GridCell* c2) {
       return (c1->getX()<c2->getX());
   } 
 };
-
 //Struct that holds an operator to compare cell Y values
 struct CompareY {
   bool const operator()(GridCell* c1, GridCell* c2) {
       return (c1->getY()<c2->getY());
   } 
 };
-
 // Function that is responsible for moving the cell left
 bool Block::moveLeft(){
   //We check to see that the block is not obstructed by a wall or a cell
@@ -50,7 +51,6 @@ bool Block::moveLeft(){
   }
   return true;
 }
-
 // Function that is responsible for moving the cell right
 bool Block::moveRight(){
   //We check to see that the block is not obstructed by a wall or a cell
@@ -74,7 +74,6 @@ bool Block::moveRight(){
   }
   return true;
 }
-
 // Function that is responsible for moving the cell right
 bool Block::moveDown(){
   //We check to see that the block is not obstructed by a wall or a cell
@@ -98,13 +97,11 @@ bool Block::moveDown(){
   }
   return true;
 }
-
 void Block::shiftCoordinates (std::vector<int> &vec, int shift){
   for (auto &i: vec){
       i += shift;
   }    
 }
-
 bool Block::rotate(std::string direction){
   //storing xCoordinates and yCoordinates of each blockCell
   //in xCoords and yCoords respectively
@@ -112,13 +109,11 @@ bool Block::rotate(std::string direction){
       xCoords.emplace_back(i->getX());
       yCoords.emplace_back(i->getY());
   }
-
   //finding bottom left corner of the smallest rectangle containing the Block
   auto xMinMax = std::minmax_element(xCoords.begin(), xCoords.end());
   auto yMinMax = std::minmax_element(yCoords.begin(), yCoords.end());
   origBottomLeft.first = *xMinMax.first;
   origBottomLeft.second = *yMinMax.second;
-
   //finding the topLeft corner of the smallest rectangle containing the Block
   topLeft.first = *xMinMax.first;
   topLeft.second = *yMinMax.first;
@@ -129,7 +124,6 @@ bool Block::rotate(std::string direction){
   
   //Transpose of the block:
   xCoords.swap(yCoords);
-
   //For clockwise rotation
   if (direction == "CW"){
       //Reflecting coordinates vertically to the right
@@ -138,7 +132,6 @@ bool Block::rotate(std::string direction){
           i += 2 * (xMax - i);
       }
   }
-
   //For counter-clockwise rotation
   else if (direction == "CCW"){
       //Reflecting coordinates horizontally downwards
@@ -147,7 +140,6 @@ bool Block::rotate(std::string direction){
           i += 2 * (yMax - i);
       }
   }
-
   //Re-adjusting xCoordinates back to the top left origin
   xMinMax = std::minmax_element(xCoords.begin(), xCoords.end());
   yMinMax = std::minmax_element(yCoords.begin(), yCoords.end());
@@ -155,13 +147,11 @@ bool Block::rotate(std::string direction){
   topLeft.second = *yMinMax.first;  
   shiftCoordinates (xCoords, -(topLeft.first));
   shiftCoordinates (yCoords, -(topLeft.second));
-
   //finding the new bottom left corner of the smallest recatangle containing the Block
   newBottomLeft.first = *(std::min_element(std::begin(xCoords), std::end(xCoords)));
   newBottomLeft.second = *(std::max_element(std::begin(yCoords), std::end(yCoords)));
   int xDiff = origBottomLeft.first - newBottomLeft.first;
   int yDiff = origBottomLeft.second - newBottomLeft.second;
-
   //Readjusting the coordinates to reflect the actual position on the grid
   shiftCoordinates (xCoords, xDiff);
   shiftCoordinates (yCoords, yDiff);
@@ -173,7 +163,6 @@ bool Block::rotate(std::string direction){
   if (((*xMinMax.first) < 0) or ((*yMinMax.first) < 0) or ((*xMinMax.second) >= grid->getWidth()) or ((*yMinMax.second) >= grid->getHeight())){
       return false;
   }
-
   //Checking if new coordinates are used by any other blocks
   int unUsedCells = 0; 
   for (int i = 0; i < 4; i++){
@@ -200,7 +189,6 @@ bool Block::rotate(std::string direction){
   }
   return false;
 }
-
 //Remove reference to cell in the blockCells vector
 void Block::removeCellFromBlock(int x, int y){
     for(int i = 0; i < (int)blockCells.size(); i++){
@@ -209,7 +197,6 @@ void Block::removeCellFromBlock(int x, int y){
         }
     }
 }
-
 //Set each cell in the block to be its downwards neighbour
 void Block::moveCellsDown(int rowCleared){
     for(int i = 0; i < (int)blockCells.size(); i++){
@@ -224,6 +211,15 @@ int Block::numCells(){
     return blockCells.size();
 }
 
+void Block::unsetBlock(){
+    for(auto i: blockCells){
+        i->isUsed = false;
+        i->setType(' ');
+    }   
+}
 
+int Block::getGeneratedLevel(){
+    return generatedLevel;
+}
 
 

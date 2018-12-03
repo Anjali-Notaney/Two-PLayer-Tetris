@@ -3,7 +3,7 @@
 #include "../Grid/GridCell.h"
 #include "../Grid/Grid.h"
 
-OBlock::OBlock(Grid *g): Block(g, 'O'){
+OBlock::OBlock(Grid *g, int generatedLevel): Block(g, 'O',generatedLevel){
     std::vector<GridCell*> tmp;
     tmp.emplace_back(g->getGridCell(0,2));
     tmp.emplace_back(g->getGridCell(0,3));

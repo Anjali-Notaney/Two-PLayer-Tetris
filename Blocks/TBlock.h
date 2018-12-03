@@ -9,8 +9,7 @@
 
 class TBlock : public Block{
     public:
-    TBlock(Grid* g);
+    TBlock(Grid* g, int generatedLevel);
     ~TBlock();
 };
-
 #endif

@@ -9,7 +9,7 @@
 
 class OBlock : public Block{
     public:
-    OBlock(Grid* g);
+    OBlock(Grid* g, int generatedLevel);
     ~OBlock();
 };
 

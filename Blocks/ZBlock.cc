@@ -3,7 +3,7 @@
 #include "../Grid/GridCell.h"
 #include "../Grid/Grid.h"
 
-ZBlock::ZBlock(Grid* g):Block(g, 'Z'){
+ZBlock::ZBlock(Grid* g, int generatedLevel):Block(g, 'Z', generatedLevel){
     std::vector<GridCell*>tmp;
     tmp.emplace_back(g->getGridCell(0,2));
     tmp.emplace_back(g->getGridCell(1,2));
@@ -19,4 +19,3 @@ ZBlock::ZBlock(Grid* g):Block(g, 'Z'){
 }
 
 ZBlock::~ZBlock(){}
-

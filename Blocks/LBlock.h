@@ -9,7 +9,7 @@
 
 class LBlock : public Block {
     public:
-    LBlock(Grid* g);
+    LBlock(Grid* g, int generatedLevel);
     ~LBlock();
 };
 

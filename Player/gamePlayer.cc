@@ -18,19 +18,36 @@
 
 
 //GamePlayer::GamePlayer(xWindow &w){}
+<<<<<<< HEAD
 GamePlayer::GamePlayer(Grid* grid, Level *level, Xwindow* window):grid(grid), level(level), window(window){
   nextBlock = getNextBlock();
   this->displayBounds.first = std::make_pair(0, 0); // top left corner
   this->displayBounds.second = std::make_pair(250, 500); // bottom right corner
+=======
+GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):Player(grid, level, id){
+    nextBlock = getNextBlock();
+>>>>>>> master
 }
+//GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):grid{grid}, level{level}, playerId{id}{}
 
 GamePlayer::~GamePlayer(){
   delete level;
   delete currBlock;
 }
 
+bool GamePlayer::getPlayerId(){
+    return this->playerId;
+}
+
 std::vector<GridCell>* GamePlayer::getRow(int rowNum){
   return grid->getRow(rowNum);
+}
+
+void GamePlayer::printRow (int rowNum) {
+    std::vector<GridCell> gridRow = *(this->grid->getRow(rowNum));
+    for (auto cells : gridRow){
+        std::cout << cells;
+    }
 }
 
 int GamePlayer::getLevel() {
@@ -45,50 +62,152 @@ char GamePlayer::getNextBlock() {
   return level->getNextBlock();
 }
 
-void GamePlayer::setNextBlock() {
-  switch (nextBlock)
+void GamePlayer::getBlock(char blockChar){
+  switch (blockChar)
   {
     case 'S':
-      currBlock = new SBlock(grid);
+      currBlock = new SBlock(grid, level->getLevel());
       break;
     case 'Z':
-      currBlock = new ZBlock(grid);
+      currBlock = new ZBlock(grid, level->getLevel());
       break;
     case 'T':
-      currBlock = new TBlock(grid);
+      currBlock = new TBlock(grid, level->getLevel());
       break;
     case 'L':
-      currBlock = new LBlock(grid);
+      currBlock = new LBlock(grid, level->getLevel());
       break;
     case 'J':
-      currBlock = new JBlock(grid);
+      currBlock = new JBlock(grid, level->getLevel());
       break;
     case 'O':
-      currBlock = new OBlock(grid);
+      currBlock = new OBlock(grid, level->getLevel());
       break;
     case 'I':
-      currBlock = new IBlock(grid);
+      currBlock = new IBlock(grid, level->getLevel());
       break;
   }
+}
+
+void GamePlayer::setNextBlock() {
+  getBlock(nextBlock);
   nextBlock = getNextBlock();
 }
 
-void GamePlayer::moveLeft() {
-  currBlock->moveLeft();
+void GamePlayer::moveLeft(int times) {
+  for(int i = times; i > 0; i--){
+    currBlock->moveLeft();
+  }
 }
 
-void GamePlayer::moveRight() {
-  currBlock->moveRight();
+void GamePlayer::moveRight(int times) {
+  for(int i = times; i > 0; i--){
+    currBlock->moveRight();
+  }
 }
 
-void GamePlayer::moveDown() {
-  currBlock->moveDown();
+bool GamePlayer::moveDown(int times) {
+  for(int i = times; i > 0; i--){
+    if(currBlock->moveDown() == false){
+      return false;
+    };
+  }
+  return true;
 }
 
-void GamePlayer::rotate(std::string direction){
-  currBlock->rotate(direction);
+void GamePlayer::rotate(std::string direction, int times){
+  for(int i = times; i > 0; i--){
+    currBlock->rotate(direction);
+  }
 }
 
+void GamePlayer::setNextBlockChar(char c){
+  nextBlock = c;
+}
+
+char GamePlayer::getNextBlockChar(){
+  return nextBlock;
+}
+
+void GamePlayer::levelUp(int times){
+  for(int i = times; i > 0; i--){
+    int levelNum = level->getLevel();
+    if(levelNum != 4){
+      delete level;
+      switch(levelNum){
+        case 0:
+          level = new Level1();
+          break;
+        case 1:
+          level = new Level2();
+          break;
+        case 2:
+          level = new Level3();
+          break;
+        case 3:
+          level = new Level4(grid);
+          break;
+      }
+    }
+  }
+}
+
+void GamePlayer::levelDown(int times){
+  for(int i = times; i > 0; i--){
+    int levelNum = level->getLevel();
+    if(levelNum != 0){
+      delete level;
+      switch(levelNum){
+        case 1:
+          //If differennt sequencefile is defined and player 1
+          #ifdef scriptfile1
+          if(playerId == 1) level = new Level0("scriptfile1");
+          break;
+          #endif
+          //Otherwise just use sequence1.txt
+          if(playerId == 1) level = new Level0("sequence1.txt");
+
+          //If different sequencefile is defined and player 2
+          #ifdef scriptfile2
+          if(playerId == 0) level = new Level0("scriptfile2");
+          break;
+          #endif
+          //Otherwise just use sequence2.txt
+          if(playerId == 0) level = new Level0("sequence2.txt");
+          break;
+        case 2:
+          level = new Level1();
+          break;
+        case 3:
+          level = new Level2();
+          break;
+        case 4:
+          level = new Level3();
+          break;
+      }
+    }
+  }
+}
+
+void GamePlayer::noRandom(std::string sequencefile){
+  if(level->getLevel() == 3 || level->getLevel() == 4){
+    level->noRandom(sequencefile);
+  }
+}
+
+void GamePlayer::random(){
+  if(level->getLevel() == 3 || level->getLevel() == 4){
+    level->random();
+  }
+}
+
+void GamePlayer::replaceBlock(char c){
+  currBlock->unsetBlock();
+  delete currBlock;
+  getBlock(c);
+}
+
+<<<<<<< HEAD
 void GamePlayer::drawXWindowBoard(){
   // Draw the level and the Score
   this->window->drawString(displayBounds.first.first, displayBounds.first.second + 
@@ -144,6 +263,8 @@ void GamePlayer::drawXWindowBoard(){
 }
 
 //Harsh
+=======
+>>>>>>> master
 
 //When a block is dropped, we go through all the rows of the grid.
 //If the row is full then we loop through the row
@@ -189,12 +310,13 @@ void GamePlayer::removeEmptyBlocks(){
   for(int i = 0; i < (int)blocksOnBoard.size(); i++){
     if(blocksOnBoard.at(i)->numCells() == 0){
       blocksOnBoard.erase(blocksOnBoard.begin() + i);
+      score += (blocksOnBoard.at(i)->getGeneratedLevel() + 1) * (blocksOnBoard.at(i)->getGeneratedLevel() + 1);
       i--;
     }
   }
 }
 
-int GamePlayer::drop() {
+int GamePlayer::drop(int times) {
   while(currBlock->moveDown());
   blocksOnBoard.emplace_back(currBlock);
   int numRowsCleared = 0;
@@ -237,84 +359,10 @@ int GamePlayer::drop() {
   //Add to the score
   if(numRowsCleared!= 0) score += level->getScore(numRowsCleared);
   
+  //change the player
+  playerOnePlaying = !playerOnePlaying;
+
   //Return the num rows cleared
   return numRowsCleared;
 }
 
-void GamePlayer::printBlock(){
-    switch (nextBlock)
-  {
-    case 'S':
-      std::cout << " SS" << std::endl;
-      std::cout << "SS " << std::endl;
-      break;
-    case 'Z':
-      std::cout << "ZZ " << std::endl;
-      std::cout << " ZZ" << std::endl;
-      break;
-    case 'T':
-      std::cout << "TTT" << std::endl;
-      std::cout << " T " << std::endl;
-      break;
-    case 'L':
-      std::cout << "  L" << std::endl;
-      std::cout << "LLL" << std::endl;
-      break;
-    case 'J':
-      std::cout << "J  " << std::endl;
-      std::cout << "JJJ" << std::endl;
-      break;
-    case 'O':
-      std::cout << "OO" << std::endl;
-      std::cout << "OO" << std::endl;
-      break;
-    case 'I':
-      std::cout << "IIII" << std::endl;
-      break;
-  }
-}
-
-void GamePlayer::print(){
-  std::cout << "Level:    " << getLevel() << std::endl;
-  std::cout << "Score:    " << score << std::endl;
-  std::cout << "-----------" << std::endl;
-  for(int y = 0; y < 18; y++){
-    for(int x = 0; x <11; x++){
-      std::cout << *(grid->getGridCell(x,y));
-    }
-    std::cout << std::endl;
-  }
-  std::cout << "-----------" << std::endl;
-  std::cout << "Next:" << std::endl;
-  printBlock();
-}
-
-int main(){
-  Grid *g = new Grid();
-  Level *l = new Level0("sequence1.txt");
-  Player *p = new GamePlayer(g,l);
-  p->setNextBlock();
-  p->getNextBlock();
-  p->print();
-  while(!std::cin.fail() || !std::cin.eof()){
-    std::string s;
-    std::cin >> s;
-    if(s == "l"){
-      p->moveLeft();
-    } else if (s == "r"){
-      p->moveRight();
-    } else if (s == "do"){
-      p->moveDown();
-    } else if (s == "dr"){
-      p->drop();
-      p->setNextBlock();
-    } else if (s == "rtc"){
-      p->rotate("CW");
-    } else if (s == "rtcw"){
-      p->rotate("CCW");
-    } else {
-      break;
-    }
-    p->print();
-  }
-}
