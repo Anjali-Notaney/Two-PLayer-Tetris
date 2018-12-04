@@ -446,6 +446,12 @@ void drawStats(Player* p1, Player* p2, Xwindow* window, int numSections, char se
 	}
 }
 
+void updateHighScore(Xwindow* window, int highScore){
+	window->setFill("222288");
+	window->fillRectangle(window->getWidth()/2 - 50, window->getHeight()*0.01, window->getWidth()/3, window->getHeight()*(0.1));
+	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, (std::string)"HIGHSCORE: " + std::to_string(highScore));
+}
+
 void initWindow(Xwindow* window, int highScore, float numSections){
 	// set middle
 	window->setFill("222288");
@@ -555,6 +561,7 @@ int main(int argc, const char* argv[]){
 
 				executeCommand(s,activePlayer, p1, p2, commands, highScore, sequencefile1, sequencefile2, seed, numTimes, window);
 				if(p1->getScore() > highScore || p2->getScore() > highScore) highScore = std::max(p1->getScore(), p2->getScore());
+				updateHighScore(window, highScore);
 				printPlayers(activePlayer,p1,p2,highScore, window);
 			} catch(std::exception){
 				std::cout << "Game Over!" << std::endl;
