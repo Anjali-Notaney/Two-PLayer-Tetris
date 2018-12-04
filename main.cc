@@ -561,7 +561,9 @@ int main(int argc, const char* argv[]){
 
 				executeCommand(s,activePlayer, p1, p2, commands, highScore, sequencefile1, sequencefile2, seed, numTimes, window);
 				if(p1->getScore() > highScore || p2->getScore() > highScore) highScore = std::max(p1->getScore(), p2->getScore());
-				updateHighScore(window, highScore);
+				if(window){
+					updateHighScore(window, highScore);
+				}
 				printPlayers(activePlayer,p1,p2,highScore, window);
 			} catch(std::exception){
 				std::cout << "Game Over!" << std::endl;
