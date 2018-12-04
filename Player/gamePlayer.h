@@ -33,6 +33,7 @@ class GamePlayer: public Player{
     void setNextBlockChar(char c) override;
     char getNextBlockChar() override;
     void setNextBlock() override;
+    void setPlayerOneActive () override;
     void moveLeft(int times) override;
     void moveRight(int times) override;
     bool moveDown(int times) override;

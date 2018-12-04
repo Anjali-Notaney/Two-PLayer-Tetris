@@ -23,6 +23,7 @@ class HeavyDecorator: public EffectsDecorator{
     void setNextBlockChar(char c) override;
     char getNextBlock() override;
     void setNextBlock() override;
+    void setPlayerOneActive () override;
     void moveLeft(int times) override;
     void moveRight(int times) override;
     bool moveDown(int times) override;

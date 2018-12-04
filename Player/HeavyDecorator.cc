@@ -54,6 +54,10 @@ void HeavyDecorator::setNextBlock(){
     player->setNextBlock();
 }
 
+void HeavyDecorator::setPlayerOneActive(){
+    player->setPlayerOneActive();
+}
+
 void HeavyDecorator::moveLeft(int times){
     player->moveLeft(times);
     if (player->getPlayerId() == player->isPlayerOnePlaying()){

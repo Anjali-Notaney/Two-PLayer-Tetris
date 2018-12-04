@@ -20,6 +20,5 @@ class Level4 : public Level{
     void noRandom(std::string sequencefile) override;
     void random() override;
 };
-
 #endif
 

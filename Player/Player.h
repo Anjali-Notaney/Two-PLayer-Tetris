@@ -30,6 +30,7 @@ class Player{
     virtual bool getPlayerId() = 0;
     virtual Player* getBasePlayer() = 0;
     bool isPlayerOnePlaying();
+    virtual void setPlayerOneActive () = 0;
     int getGridWidth();
     int getGridHeight();
     virtual int getLevel() = 0;

@@ -26,6 +26,7 @@ class BlindDecorator: public EffectsDecorator{
     char getNextBlock() override;
     int getScore() override;
     void setNextBlock() override;
+    void setPlayerOneActive () override;
     void moveLeft(int times) override;
     void moveRight(int times) override;
     bool moveDown(int times) override;

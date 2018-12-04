@@ -19,10 +19,13 @@
 #include <iterator>
 #include <cmath>
 
+<<<<<<< HEAD
 #define STRINGIZE(x) #x
 #define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
 
 
+=======
+>>>>>>> 29bdb69ed3c542fdee4e77d0d6bef8e8e21864b3
 //GamePlayer::GamePlayer(xWindow &w){}
 
 GamePlayer::GamePlayer(Grid* grid, Level *level, bool id):Player(grid, level, id){
@@ -129,6 +132,10 @@ void GamePlayer::getBlock(char blockChar){
 void GamePlayer::setNextBlock() {
   getBlock(nextBlock);
   nextBlock = getNextBlock();
+}
+
+void GamePlayer::setPlayerOneActive () {
+  playerOnePlaying = true;
 }
 
 void GamePlayer::moveLeft(int times) {

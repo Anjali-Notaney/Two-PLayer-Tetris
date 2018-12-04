@@ -4,7 +4,10 @@ Player::Player(Grid* grid, Level *level, bool id):grid{grid}, level{level}, play
 
 Player::Player(){}
 
-Player::~Player(){}
+Player::~Player(){
+    delete level;
+    delete grid;
+}
 
 int Player::getGridWidth(){
     return this->grid->getWidth();

@@ -23,6 +23,7 @@ class ForceDecorator: public EffectsDecorator{
     int getScore() override;
     char getNextBlock() override;
     void setNextBlock() override;
+    void setPlayerOneActive () override;
     void setNextBlockChar(char c) override;
     void moveLeft(int times)override;
     void moveRight(int times)override;
