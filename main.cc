@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include <fstream>
 #include <cctype>
-#include <math.h>
 
 std::map<char, std::string> Block::colours = {};
 void drawBlock(int x, int y, char type, int width, Xwindow* window);
@@ -259,7 +258,6 @@ int getNumTimes(std::string &s){
             return numTimes;
         }
     }
-   return 1;
 }
 
 //Takes a vector of commands and finds the matching command
@@ -582,9 +580,6 @@ int main(int argc, const char* argv[]){
 		p1->setPlayerOneActive();
 		delete p1;
 		delete p2;
-		if(window){
-			delete window;
-		}
 	}
 }
 
