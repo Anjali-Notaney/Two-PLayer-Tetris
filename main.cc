@@ -289,13 +289,7 @@ void changeTurn( Player* &activePlayer, Player* &p1, Player* &p2){
 
 //Execute the command given
 void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &p2, std::vector<std::string> commands, int highScore,
-<<<<<<< HEAD
 					std::string scriptfile1, std::string scriptfile2, int seed, int times = 1, Xwindow* window = nullptr){
-    if(s == "left"){
-        activePlayer->moveLeft(times);
-        if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
-=======
-					std::string scriptfile1, std::string scriptfile2, int seed, int times = 1){
     if ((s == "left") or (s == "right") or (s == "down") or (s == "clockwise") or (s == "counterclockwise")){
 		if(s == "left") activePlayer->moveLeft(times);
 		else if (s == "right") activePlayer->moveRight(times);
@@ -303,7 +297,6 @@ void executeCommand(std::string s, Player* &activePlayer, Player* &p1, Player* &
 		else if (s == "clockwise") activePlayer->rotate("CW", times);
 		else if (s == "counterclockwise") activePlayer->rotate("CCW", times);
 		if (activePlayer->isPlayerOnePlaying() != activePlayer->getPlayerId()){
->>>>>>> 29bdb69ed3c542fdee4e77d0d6bef8e8e21864b3
             changeTurn(activePlayer, p1, p2);  
         }
 	} else if (s == "drop"){
