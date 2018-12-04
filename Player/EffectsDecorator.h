@@ -8,3 +8,4 @@ class EffectsDecorator: public Player{
 	virtual ~EffectsDecorator() = 0; //pure virtual destructor for this abstract class
 };
 #endif
+

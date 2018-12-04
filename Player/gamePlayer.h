@@ -47,3 +47,4 @@ class GamePlayer: public Player{
     int getDisplayOffset();
 };
 #endif
+

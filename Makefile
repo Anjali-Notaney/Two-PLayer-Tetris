@@ -78,4 +78,4 @@ XWindow.o: XWindow/XWindow.h XWindow/XWindow.cc
 .PHONY: clean
 
 clean:
-	rm *.o out
+	rm *.o biquadris

@@ -67,3 +67,4 @@ std::ostream& operator<<(std::ostream& out, GridCell& cell){
 	}
 	return out;
 }
+

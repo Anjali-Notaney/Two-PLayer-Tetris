@@ -11,3 +11,4 @@ void executeCommand(Player& pl, cmdfunc command, int times = 1);
 cmdfunc matchCommand(Player& pl, std::map<std::string, cmdfunc>& commands);
 
 #endif
+

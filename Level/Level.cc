@@ -11,3 +11,4 @@ int Level::getScore(int linesCleared){
 int Level::getLevel(){
     return level;
 }
+

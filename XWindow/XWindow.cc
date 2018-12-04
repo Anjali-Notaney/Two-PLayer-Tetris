@@ -111,3 +111,4 @@ int Xwindow::getHeight(){
   return this->height;
 }
 
+

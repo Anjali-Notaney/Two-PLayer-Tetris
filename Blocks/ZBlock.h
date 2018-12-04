@@ -13,3 +13,4 @@ class ZBlock : public Block {
     ~ZBlock();
 };
 #endif
+

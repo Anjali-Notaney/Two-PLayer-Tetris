@@ -46,3 +46,4 @@ void Level3::noRandom(std::string sequencefile){
 void Level3::random(){
     isRandom = true;
 }
+

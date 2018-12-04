@@ -20,3 +20,4 @@ class Grid{
     friend std::ostream& operator<<(std::ostream& out, Grid& grid);
 };
 #endif
+

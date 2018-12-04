@@ -49,3 +49,4 @@ void executeCommand(Player& pl, cmdfunc command, int times){
 		command(pl);
 	}
 }
+
