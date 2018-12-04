@@ -135,7 +135,7 @@ void printPlayerBlocks(Player* p1, Player* p2){
 }
 
 void printPlayers(Player* activePlayer, Player *p1, Player *p2, int highScore, Xwindow* window=nullptr){
-    system("clear");
+    // system("clear");
 	std::cout << "+====================+" << std::endl;
 	std::cout << " HIGHSCORE       " << highScore << std::endl;
 	std::cout << "+====================+" << std::endl;
