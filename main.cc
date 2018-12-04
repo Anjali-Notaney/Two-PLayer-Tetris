@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include <fstream>
 #include <cctype>
-#include <math.h>
 
 std::map<char, std::string> Block::colours = {};
 void drawBlock(int x, int y, char type, int width, Xwindow* window);
@@ -259,7 +258,6 @@ int getNumTimes(std::string &s){
             return numTimes;
         }
     }
-	return 1;
 }
 
 //Takes a vector of commands and finds the matching command
@@ -450,7 +448,7 @@ void drawStats(Player* p1, Player* p2, Xwindow* window, int numSections, char se
 
 void updateHighScore(Xwindow* window, int highScore){
 	window->setFill("222288");
-	window->fillRectangle(window->getWidth()/2 - 50, window->getHeight()*0.01, window->getWidth()/3, window->getHeight()*(0.1));
+	window->fillRectangle(window->getWidth()/2 - 50, window->getHeight()*0.02, window->getWidth()/6, window->getHeight()*(0.1));
 	window->drawString(window->getWidth()/2 - 40, window->getHeight()*0.05, (std::string)"HIGHSCORE: " + std::to_string(highScore));
 }
 
