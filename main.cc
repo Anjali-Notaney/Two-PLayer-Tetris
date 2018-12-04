@@ -578,6 +578,9 @@ int main(int argc, const char* argv[]){
 		p1->setPlayerOneActive();
 		delete p1;
 		delete p2;
+		if(window){
+			delete window;
+		}
 	}
 }
 
